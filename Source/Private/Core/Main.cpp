@@ -10,6 +10,10 @@
 
 #include <tclap/CmdLine.h>
 
+#if defined(MPP_PLATFORM_WINDOWS)
+#    include <Windows.h>
+#endif
+
 int main(int argc, char** argv)
 {
     return mpp::RealMain(argc, argv);
@@ -25,6 +29,7 @@ Settings ParseSettings(int argc, char** argv)
                                                         "string", cmd);
     TCLAP::ValueArg<String> propertiesFileArg("", "properties", "Minecraft properties file", false, "", "string", cmd);
     TCLAP::ValueArg<String> dateFormatArg("", "date-format", "Date format", false, "", "string", cmd);
+    TCLAP::SwitchArg eulaAgreeArg("", "eula-agree", "Agree to the Minecraft EULA", cmd, false);
     TCLAP::ValueArg<String> fileEncodingArg("", "file-encoding", "File encoding", false, "UTF-8", "string", cmd);
     TCLAP::ValueArg<String> hostArg("", "host", "Server host", false, "localhost", "string", cmd);
     TCLAP::ValueArg<int> portArg("", "port", "Server port", false, 25565, "port", cmd);
@@ -42,6 +47,7 @@ Settings ParseSettings(int argc, char** argv)
     settings.minePlusPlusSettingsFile = minePlusPlusSettingsFileArg.getValue();
     settings.propertiesFile = propertiesFileArg.getValue();
     settings.dateFormat = dateFormatArg.getValue();
+    settings.eulaAgree = eulaAgreeArg.getValue();
     settings.fileEncoding = fileEncodingArg.getValue();
     settings.host = hostArg.getValue();
     settings.port = portArg.getValue();
@@ -58,10 +64,20 @@ Settings ParseSettings(int argc, char** argv)
 int RealMain(int argc, char** argv)
 {
     MPP_LOG(LogLevel::Info, "Starting MinePlusPlus version " << MPP_VERSION);
+
+#if defined(MPP_PLATFORM_WINDOWS)
+    HANDLE stdoutHandle = GetStdHandle(STD_OUTPUT_HANDLE);
+    DWORD dwMode;
+    GetConsoleMode(stdoutHandle, &dwMode);
+    dwMode |= ENABLE_VIRTUAL_TERMINAL_PROCESSING;
+    SetConsoleMode(stdoutHandle, dwMode);
+#endif
+
     try
     {
         Settings settings = ParseSettings(argc, argv);
-        new MinePlusPlus(settings);
+        MinePlusPlus* minePlusPlus = new MinePlusPlus(settings);
+        minePlusPlus->StartServer();
         return 0;
     }
     catch (TCLAP::ArgException& e)

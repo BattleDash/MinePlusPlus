@@ -14,7 +14,7 @@ class MinePlusPlus
     MPP_API MinePlusPlus(const Settings& settings);
     MPP_API ~MinePlusPlus();
     
-
+    MPP_API void StartServer();
 
   private:
     const Settings& m_settings;

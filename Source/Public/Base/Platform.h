@@ -5,17 +5,17 @@
 namespace mpp
 {
 #if defined(MPP_EXPORTS)
-#define MPP_API __declspec(dllexport)
+#    define MPP_API __declspec(dllexport)
 #else
-#define MPP_API __declspec(dllimport)
+#    define MPP_API __declspec(dllimport)
 #endif
 
 #if defined(MPP_PLATFORM_WINDOWS)
-#define MPP_PLATFORM_NAME "Windows"
+#    define MPP_PLATFORM_NAME "Windows"
 #elif defined(MPP_PLATFORM_LINUX)
-#define MPP_PLATFORM_NAME "Linux"
+#    define MPP_PLATFORM_NAME "Linux"
 #else
-#error "Unknown platform"
+#    error "Unknown platform"
 #endif
 
 enum class Platform
@@ -28,14 +28,14 @@ enum class Platform
 #elif defined(MPP_PLATFORM_LINUX)
     Current = Linux
 #else
-#error "Unknown platform"
+#    error "Unknown platform"
 #endif
 };
 
 #if defined(MPP_DEBUG)
-#define MPP_BUILD_CHANNEL_NAME "Debug"
+#    define MPP_BUILD_CHANNEL_NAME "Debug"
 #else
-#define MPP_BUILD_CHANNEL_NAME "Release"
+#    define MPP_BUILD_CHANNEL_NAME "Release"
 #endif
 
 enum class BuildChannel

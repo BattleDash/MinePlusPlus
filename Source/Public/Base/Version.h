@@ -11,4 +11,6 @@
 #define MPP_VERSION_MINOR 0
 #define MPP_VERSION_PATCH 1
 
-#define MPP_VERSION std::to_string(MPP_VERSION_MAJOR) + "." + std::to_string(MPP_VERSION_MINOR) + "." + std::to_string(MPP_VERSION_PATCH)
+#define MPP_VERSION                                                                                                    \
+    std::to_string(MPP_VERSION_MAJOR) + "." + std::to_string(MPP_VERSION_MINOR) + "." +                                \
+        std::to_string(MPP_VERSION_PATCH)
