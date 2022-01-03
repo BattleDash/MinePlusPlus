@@ -66,7 +66,7 @@ ServerProperties::ServerProperties(const String& filePath)
     MPP_LOG(LogLevel::Debug, properties.GetComments().size());
     if (properties.GetComments().size() != 1)
     {
-        properties.AddComment("Minecraft server properties");
+        properties.AddComment("MinePlusPlus server properties");
     }
     properties.Save();
 }

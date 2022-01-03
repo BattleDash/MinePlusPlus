@@ -33,17 +33,9 @@ class Properties
         if (HasKey(key))
         {
             String input = m_properties.at(key);
-            if (input == "true")
-            {
-                input = "1";
-            }
-            else if (input == "false")
-            {
-                input = "0";
-            }
             // NOTE: Strings will fail here if empty, and return def.
             T value;
-            if (std::istringstream(input) >> value)
+            if (std::istringstream(input) >> std::boolalpha >> value)
             {
                 return value;
             }
@@ -53,7 +45,7 @@ class Properties
             }
         }
         std::ostringstream oss;
-        oss << def;
+        oss << std::boolalpha << def;
         SetValue(key, oss.str());
         return def;
     }

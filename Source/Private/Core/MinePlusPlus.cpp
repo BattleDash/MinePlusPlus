@@ -50,7 +50,7 @@ void MinePlusPlus::StartServer()
     }
 
     ServerProperties properties = ServerProperties("server.properties");
-    MPP_LOG(LogLevel::Info, "Online Mode " << properties.onlineMode);
+    MPP_LOG(LogLevel::Debug, "Online Mode " << properties.onlineMode);
 
 }
 } // namespace mpp
