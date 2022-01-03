@@ -25,17 +25,19 @@ enum class LogLevel
 
 // This is a mess purely because of clang-format.
 #define MPP_LOG_LEVEL_COLOR(level)                                                                                     \
-    (level == LogLevel::Debug                                                                                          \
+    (level == mpp::LogLevel::Debug                                                                                     \
          ? "\x1B[37m"                                                                                                  \
-         : (level == LogLevel::Info                                                                                    \
+         : (level == mpp::LogLevel::Info                                                                               \
                 ? ""                                                                                                   \
-                : (level == LogLevel::Warning                                                                          \
+                : (level == mpp::LogLevel::Warning                                                                     \
                        ? "\x1B[33m"                                                                                    \
-                       : (level == LogLevel::Error ? "\x1B[31m" : (level == LogLevel::Fatal ? "\x1B[31m" : "")))))
+                       : (level == mpp::LogLevel::Error ? "\x1B[31m"                                                   \
+                                                        : (level == mpp::LogLevel::Fatal ? "\x1B[31m" : "")))))
 
 #define SHOULD_LOG(level) (level >= mpp::LogLevel::Current)
 
-// We could one-line this, but operator<< here returns an ostream, which doesn't have a str() method, and gcc doesn't like that.
+// We could one-line this, but operator<< here returns an ostream, which doesn't have a str() method, and gcc doesn't
+// like that.
 #define STREAM_MESSAGE(message)                                                                                        \
     std::stringstream ss;                                                                                              \
     ss << message;                                                                                                     \

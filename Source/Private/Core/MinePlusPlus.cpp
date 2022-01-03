@@ -5,6 +5,9 @@
 #include <Core/Eula.h>
 #include <Core/MinePlusPlus.h>
 #include <Core/ServerProperties.h>
+#include <Server/DedicatedServer.h>
+
+#include <thread>
 
 namespace mpp
 {
@@ -48,10 +51,10 @@ void MinePlusPlus::StartServer()
         }
     }
 
+    MPP_LOG(LogLevel::Info, "Loading properties");
     ServerProperties properties = ServerProperties(m_settings.propertiesFile, m_settings);
-    MPP_LOG(LogLevel::Info, "MinePlusPlus server starting on port " << properties.serverPort << "...");
-    MPP_LOG(LogLevel::Info, "Default game type: " << properties.gamemode->ToString());
-    MPP_LOG(LogLevel::Info,
-            "This server is running MinePlusPlus version " << MPP_VERSION << " (MC: " << MPP_MINECRAFT_VERSION << ")");
+    //DedicatedServer server(properties);
+    std::thread serverThread(&DedicatedServer::InitializeServer, new DedicatedServer(&properties));
+    serverThread.join();
 }
 } // namespace mpp

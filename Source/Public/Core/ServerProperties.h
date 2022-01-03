@@ -65,5 +65,6 @@ class ServerProperties
     String textFilteringConfig;
     int playerIdleTimeout;
     bool whiteList;
+    String pluginsDirectory;
 };
 } // namespace mpp

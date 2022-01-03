@@ -79,7 +79,7 @@ int RealMain(int argc, char** argv)
 
     MPP_LOG(LogLevel::Info, "Starting MinePlusPlus version " << MPP_VERSION);
 
-    std::set_terminate([]() {
+    /*std::set_terminate([]() {
         try
         {
             std::rethrow_exception(std::current_exception());
@@ -93,7 +93,7 @@ int RealMain(int argc, char** argv)
             MPP_LOG(LogLevel::Fatal, "Unhandled exception");
         }
         std::abort();
-    });
+    });*/
 
     try
     {

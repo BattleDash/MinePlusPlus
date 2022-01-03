@@ -63,6 +63,7 @@ ServerProperties::ServerProperties(const String& filePath, const StartupSettings
     textFilteringConfig = properties.GetValue<String>("text-filtering-config", "");
     playerIdleTimeout = properties.GetValue<int>("player-idle-timeout", 0);
     whiteList = properties.GetValue<bool>("white-list", false);
+    pluginsDirectory = startupSettings.pluginsDirectory.empty() ? properties.GetValue<String>("plugins-directory", "plugins") : startupSettings.pluginsDirectory;
     if (properties.GetComments().size() != 1)
     {
         properties.AddComment("MinePlusPlus server properties");

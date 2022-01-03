@@ -2,6 +2,7 @@
 
 #pragma once
 
+#include <Base/Platform.h>
 #include <Base/String.h>
 
 #include <algorithm>
@@ -12,63 +13,28 @@ namespace mpp
 class EGamemode
 {
   public:
-    static EGamemode* Survival;
-    static EGamemode* Creative;
-    static EGamemode* Adventure;
-    static EGamemode* Spectator;
+    static MPP_API EGamemode* Survival;
+    static MPP_API EGamemode* Creative;
+    static MPP_API EGamemode* Adventure;
+    static MPP_API EGamemode* Spectator;
+    static MPP_API EGamemode** Values;
 
-    EGamemode(int id, const String& name);
+    MPP_API EGamemode(int id, const String& name);
 
     int m_id;
     String m_name;
 
-    inline const String ToString()
-    {
-        if (m_id == EGamemode::Survival->m_id)
-        {
-            return "survival";
-        }
-        else if (m_id == EGamemode::Creative->m_id)
-        {
-            return "creative";
-        }
-        else if (m_id == EGamemode::Adventure->m_id)
-        {
-            return "adventure";
-        }
-        else if (m_id == EGamemode::Spectator->m_id)
-        {
-            return "spectator";
-        }
-        else
-        {
-            return "unknown";
-        }
-    }
-
     static EGamemode* ByName(String name)
     {
         std::transform(name.begin(), name.end(), name.begin(), [](unsigned char c) { return std::tolower(c); });
-        if (name == "survival")
+        for (int i = 0; i < 4; i++)
         {
-            return EGamemode::Survival;
+            if (name == Values[i]->m_name)
+            {
+                return Values[i];
+            }
         }
-        else if (name == "creative")
-        {
-            return EGamemode::Creative;
-        }
-        else if (name == "adventure")
-        {
-            return EGamemode::Adventure;
-        }
-        else if (name == "spectator")
-        {
-            return EGamemode::Spectator;
-        }
-        else
-        {
-            return nullptr;
-        }
+        return nullptr;
     }
 };
 
