@@ -4,6 +4,9 @@
 
 #include <Base/String.h>
 
+#include <algorithm>
+#include <cctype>
+
 namespace mpp
 {
 class EGamemode
@@ -19,21 +22,21 @@ class EGamemode
     int m_id;
     String m_name;
 
-    inline const String ToString(EGamemode* difficulty)
+    inline const String ToString()
     {
-        if (difficulty->m_id == EGamemode::Survival->m_id)
+        if (m_id == EGamemode::Survival->m_id)
         {
             return "survival";
         }
-        else if (difficulty->m_id == EGamemode::Creative->m_id)
+        else if (m_id == EGamemode::Creative->m_id)
         {
             return "creative";
         }
-        else if (difficulty->m_id == EGamemode::Adventure->m_id)
+        else if (m_id == EGamemode::Adventure->m_id)
         {
             return "adventure";
         }
-        else if (difficulty->m_id == EGamemode::Spectator->m_id)
+        else if (m_id == EGamemode::Spectator->m_id)
         {
             return "spectator";
         }
@@ -43,8 +46,9 @@ class EGamemode
         }
     }
 
-    static EGamemode* ByName(const String& name)
+    static EGamemode* ByName(String name)
     {
+        std::transform(name.begin(), name.end(), name.begin(), [](unsigned char c) { return std::tolower(c); });
         if (name == "survival")
         {
             return EGamemode::Survival;

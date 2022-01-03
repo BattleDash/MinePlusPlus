@@ -6,13 +6,17 @@
 #include <Base/Version.h>
 #include <Core/Main.h>
 #include <Core/MinePlusPlus.h>
-#include <Core/Settings.h>
+#include <Core/StartupSettings.h>
+#include <Core/StartupSettings.h>
 
 #include <tclap/CmdLine.h>
 
 #if defined(MPP_PLATFORM_WINDOWS)
 #    include <Windows.h>
 #endif
+
+#include <cstdlib>
+#include <exception>
 
 int main(int argc, char** argv)
 {
@@ -21,21 +25,22 @@ int main(int argc, char** argv)
 
 namespace mpp
 {
-Settings ParseSettings(int argc, char** argv)
+StartupSettings ParseSettings(int argc, char** argv)
 {
     TCLAP::CmdLine cmd("MinePlusPlus", ' ',
                        String(MPP_PLATFORM_NAME) + "-" + String(MPP_BUILD_CHANNEL_NAME) + "-" + String(MPP_VERSION));
     TCLAP::ValueArg<String> minePlusPlusSettingsFileArg("", "config", "MinePlusPlus configuration file", false, "",
                                                         "string", cmd);
-    TCLAP::ValueArg<String> propertiesFileArg("", "properties", "MinePlusPlus properties file", false, "server.properties", "string", cmd);
+    TCLAP::ValueArg<String> propertiesFileArg("", "properties", "MinePlusPlus properties file", false,
+                                              "server.properties", "string", cmd);
     TCLAP::ValueArg<String> dateFormatArg("", "date-format", "Date format", false, "", "string", cmd);
     TCLAP::SwitchArg eulaAgreeArg("", "eula-agree", "Agree to the Minecraft EULA", cmd, false);
     TCLAP::ValueArg<String> fileEncodingArg("", "file-encoding", "File encoding", false, "UTF-8", "string", cmd);
-    TCLAP::ValueArg<String> hostArg("", "host", "Server host", false, "localhost", "string", cmd);
-    TCLAP::ValueArg<int> portArg("", "port", "Server port", false, 25565, "port", cmd);
+    TCLAP::ValueArg<String> hostArg("", "host", "Server host", false, "", "string", cmd);
+    TCLAP::ValueArg<int> portArg("", "port", "Server port", false, -1, "port", cmd);
     TCLAP::ValueArg<String> levelNameArg("", "level-name", "Level name", false, "world", "string", cmd);
     TCLAP::SwitchArg stripLogColorsArg("", "strip-log-colors", "Strip log colors", cmd, false);
-    TCLAP::ValueArg<int> maxPlayersArg("", "max-players", "Max players", false, 20, "max-players", cmd);
+    TCLAP::ValueArg<int> maxPlayersArg("", "max-players", "Max players", false, -1, "max-players", cmd);
     TCLAP::SwitchArg noConsoleArg("", "no-console", "Disable console", cmd, false);
     TCLAP::SwitchArg onlineModeArg("", "online-mode", "Enable online mode", cmd, false);
     TCLAP::ValueArg<String> pluginsDirectoryArg("", "plugins-directory", "Plugins directory", false, "", "directory",
@@ -43,7 +48,7 @@ Settings ParseSettings(int argc, char** argv)
     TCLAP::ValueArg<String> worldDirArg("", "world-directory", "World directory", false, "", "directory", cmd);
     cmd.parse(argc, argv);
 
-    Settings settings;
+    StartupSettings settings;
     settings.minePlusPlusSettingsFile = minePlusPlusSettingsFileArg.getValue();
     settings.propertiesFile = propertiesFileArg.getValue();
     settings.dateFormat = dateFormatArg.getValue();
@@ -74,9 +79,25 @@ int RealMain(int argc, char** argv)
 
     MPP_LOG(LogLevel::Info, "Starting MinePlusPlus version " << MPP_VERSION);
 
+    std::set_terminate([]() {
+        try
+        {
+            std::rethrow_exception(std::current_exception());
+        }
+        catch (const std::exception& e)
+        {
+            MPP_LOG(LogLevel::Fatal, "Unhandled exception: " << e.what());
+        }
+        catch (...)
+        {
+            MPP_LOG(LogLevel::Fatal, "Unhandled exception");
+        }
+        std::abort();
+    });
+
     try
     {
-        Settings settings = ParseSettings(argc, argv);
+        StartupSettings settings = ParseSettings(argc, argv);
         MinePlusPlus* minePlusPlus = new MinePlusPlus(settings);
         minePlusPlus->StartServer();
         return 0;

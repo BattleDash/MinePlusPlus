@@ -3,12 +3,12 @@
 #pragma once
 
 #include <Base/Platform.h>
-#include <Core/Settings.h>
+#include <Core/StartupSettings.h>
 
 int main(int argc, char** argv);
 
 namespace mpp
 {
-MPP_API Settings ParseSettings(int argc, char** argv);
+MPP_API StartupSettings ParseSettings(int argc, char** argv);
 MPP_API int RealMain(int argc, char** argv);
 }

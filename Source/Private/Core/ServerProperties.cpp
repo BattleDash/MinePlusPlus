@@ -9,12 +9,12 @@
 
 namespace mpp
 {
-ServerProperties::ServerProperties(const String& filePath)
+ServerProperties::ServerProperties(const String& filePath, const StartupSettings& startupSettings)
 {
     Properties properties = Properties(filePath);
-    onlineMode = properties.GetValue<bool>("online-mode", true);
+    onlineMode = startupSettings.onlineMode || properties.GetValue<bool>("online-mode", true);
     preventProxyConnections = properties.GetValue<bool>("prevent-proxy-connections", false);
-    serverIp = properties.GetValue<String>("server-ip", "");
+    serverIp = startupSettings.host.empty() ? properties.GetValue<String>("server-ip", "") : startupSettings.host;
     spawnAnimals = properties.GetValue<bool>("spawn-animals", true);
     spawnNpcs = properties.GetValue<bool>("spawn-npcs", true);
     pvp = properties.GetValue<bool>("pvp", true);
@@ -27,8 +27,8 @@ ServerProperties::ServerProperties(const String& filePath)
     enforceWhitelist = properties.GetValue<bool>("enforce-whitelist", false);
     difficulty = EDifficulty::ByName(properties.GetValue<String>("difficulty", "Peaceful"));
     gamemode = EGamemode::ByName(properties.GetValue<String>("gamemode", "Survival"));
-    levelName = properties.GetValue<String>("level-name", "world");
-    serverPort = properties.GetValue<int>("server-port", 25565);
+    levelName = startupSettings.worldDir.empty() ? properties.GetValue<String>("level-name", "world") : startupSettings.worldDir;
+    serverPort = startupSettings.port == -1 ? properties.GetValue<int>("server-port", 25565) : startupSettings.port;
     announcePlayerAchievements = properties.GetValue<bool>("announce-player-achievements", false);
     enableQuery = properties.GetValue<bool>("enable-query", false);
     queryPort = properties.GetValue<int>("query-port", 25565);
@@ -50,7 +50,7 @@ ServerProperties::ServerProperties(const String& filePath)
     rateLimitPacketsPerSecond = properties.GetValue<int>("rate-limit", 10);
     viewDistance = properties.GetValue<int>("view-distance", 10);
     simulationDistance = properties.GetValue<int>("simulation-distance", 10);
-    maxPlayers = properties.GetValue<int>("max-players", 20);
+    maxPlayers = startupSettings.maxPlayers == -1 ? properties.GetValue<int>("max-players", 20) : startupSettings.maxPlayers;
     networkCompressionThreshold = properties.GetValue<int>("network-compression-threshold", 256);
     broadcastRconToOps = properties.GetValue<bool>("broadcast-rcon-to-ops", true);
     broadcastConsoleToOps = properties.GetValue<bool>("broadcast-console-to-ops", true);
@@ -63,7 +63,6 @@ ServerProperties::ServerProperties(const String& filePath)
     textFilteringConfig = properties.GetValue<String>("text-filtering-config", "");
     playerIdleTimeout = properties.GetValue<int>("player-idle-timeout", 0);
     whiteList = properties.GetValue<bool>("white-list", false);
-    MPP_LOG(LogLevel::Debug, properties.GetComments().size());
     if (properties.GetComments().size() != 1)
     {
         properties.AddComment("MinePlusPlus server properties");

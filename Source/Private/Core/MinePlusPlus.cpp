@@ -10,7 +10,7 @@ namespace mpp
 {
 MinePlusPlus* g_minePlusPlus;
 
-MinePlusPlus::MinePlusPlus(const Settings& settings) : m_settings(settings)
+MinePlusPlus::MinePlusPlus(const StartupSettings& settings) : m_settings(settings)
 {
     if (g_minePlusPlus != nullptr)
     {
@@ -18,9 +18,8 @@ MinePlusPlus::MinePlusPlus(const Settings& settings) : m_settings(settings)
         return;
     }
     g_minePlusPlus = this;
-    MPP_LOG(LogLevel::Info, "MinePlusPlus " << MPP_VERSION << " for Minecraft " << MPP_MINECRAFT_VERSION << "("
-                                            << MPP_PROTOCOL_VERSION << ")"
-                                            << " starting on port " << m_settings.port << "...");
+    MPP_LOG(LogLevel::Info, "MinePlusPlus for Minecraft " << MPP_MINECRAFT_VERSION << " (" << MPP_PROTOCOL_VERSION
+                                                          << ")" << " starting...");
 }
 
 MinePlusPlus::~MinePlusPlus()
@@ -49,8 +48,10 @@ void MinePlusPlus::StartServer()
         }
     }
 
-    ServerProperties properties = ServerProperties(m_settings.propertiesFile);
-    MPP_LOG(LogLevel::Debug, "Online Mode " << properties.onlineMode);
-
+    ServerProperties properties = ServerProperties(m_settings.propertiesFile, m_settings);
+    MPP_LOG(LogLevel::Info, "MinePlusPlus server starting on port " << properties.serverPort << "...");
+    MPP_LOG(LogLevel::Info, "Default game type: " << properties.gamemode->ToString());
+    MPP_LOG(LogLevel::Info,
+            "This server is running MinePlusPlus version " << MPP_VERSION << " (MC: " << MPP_MINECRAFT_VERSION << ")");
 }
 } // namespace mpp

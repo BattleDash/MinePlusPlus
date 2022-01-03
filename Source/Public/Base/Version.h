@@ -5,7 +5,7 @@
 #include <string>
 
 #define MPP_MINECRAFT_VERSION "1.18.1"
-#define MPP_PROTOCOL_VERSION 749
+#define MPP_PROTOCOL_VERSION 757
 
 #define MPP_VERSION_MAJOR 0
 #define MPP_VERSION_MINOR 0

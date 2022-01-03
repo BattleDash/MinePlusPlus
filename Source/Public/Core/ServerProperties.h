@@ -6,13 +6,14 @@
 #include <Base/String.h>
 #include <World/EDifficulty.h>
 #include <World/Level/EGamemode.h>
+#include <Core/StartupSettings.h>
 
 namespace mpp
 {
 class ServerProperties
 {
   public:
-    MPP_API ServerProperties(const String& filePath);
+    MPP_API ServerProperties(const String& filePath, const StartupSettings& startupSettings);
 
     bool onlineMode;
     bool preventProxyConnections;

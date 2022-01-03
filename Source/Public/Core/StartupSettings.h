@@ -7,7 +7,7 @@
 
 namespace mpp
 {
-class Settings
+class StartupSettings
 {
   public:
     String minePlusPlusSettingsFile;
