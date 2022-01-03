@@ -12,8 +12,8 @@ namespace mpp
 ServerProperties::ServerProperties(const String& filePath)
 {
     Properties properties = Properties(filePath);
-    onlineMode = properties.GetValue<bool>("online-mode", "true");
-    preventProxyConnections = properties.GetValue<bool>("prevent-proxy-connections", "false");
+    onlineMode = properties.GetValue<bool>("online-mode", true);
+    preventProxyConnections = properties.GetValue<bool>("prevent-proxy-connections", false);
     serverIp = properties.GetValue<String>("server-ip", "");
     spawnAnimals = properties.GetValue<bool>("spawn-animals", true);
     spawnNpcs = properties.GetValue<bool>("spawn-npcs", true);
@@ -25,10 +25,8 @@ ServerProperties::ServerProperties(const String& filePath)
     motd = properties.GetValue<String>("motd", "");
     forceGamemode = properties.GetValue<bool>("force-gamemode", false);
     enforceWhitelist = properties.GetValue<bool>("enforce-whitelist", false);
-    String difficultyVal = properties.GetValue<String>("difficulty", "Peaceful");
-    difficulty = EDifficulty::ByName(difficultyVal);
-    String gamemodeVal = properties.GetValue<String>("gamemode", "Survival");
-    gamemode = EGamemode::ByName(gamemodeVal);
+    difficulty = EDifficulty::ByName(properties.GetValue<String>("difficulty", "Peaceful"));
+    gamemode = EGamemode::ByName(properties.GetValue<String>("gamemode", "Survival"));
     levelName = properties.GetValue<String>("level-name", "world");
     serverPort = properties.GetValue<int>("server-port", 25565);
     announcePlayerAchievements = properties.GetValue<bool>("announce-player-achievements", false);
