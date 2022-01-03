@@ -4,6 +4,7 @@
 #include <Base/Version.h>
 #include <Core/Eula.h>
 #include <Core/MinePlusPlus.h>
+#include <Core/ServerProperties.h>
 
 namespace mpp
 {
@@ -47,6 +48,9 @@ void MinePlusPlus::StartServer()
             return;
         }
     }
-    
+
+    ServerProperties properties = ServerProperties("server.properties");
+    MPP_LOG(LogLevel::Info, "Online Mode " << properties.onlineMode);
+
 }
 } // namespace mpp

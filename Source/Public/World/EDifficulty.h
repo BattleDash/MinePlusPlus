@@ -6,32 +6,44 @@
 
 namespace mpp
 {
-    enum class EDifficulty
-    {
-        Peaceful,
-        Easy,
-        Normal,
-        Hard
-    };
+class EDifficulty
+{
+  public:
+    static EDifficulty* Peaceful;
+    static EDifficulty* Easy;
+    static EDifficulty* Normal;
+    static EDifficulty* Hard;
 
-    inline const String ToString(EDifficulty difficulty)
+    EDifficulty(int id, const String& name);
+
+    int m_id;
+    String m_name;
+
+    inline const String ToString(EDifficulty* difficulty)
     {
-        switch (difficulty)
+        if (difficulty->m_id == EDifficulty::Peaceful->m_id)
         {
-        case EDifficulty::Peaceful:
             return "peaceful";
-        case EDifficulty::Easy:
+        }
+        else if (difficulty->m_id == EDifficulty::Easy->m_id)
+        {
             return "easy";
-        case EDifficulty::Normal:
+        }
+        else if (difficulty->m_id == EDifficulty::Normal->m_id)
+        {
             return "normal";
-        case EDifficulty::Hard:
+        }
+        else if (difficulty->m_id == EDifficulty::Hard->m_id)
+        {
             return "hard";
-        default:
+        }
+        else
+        {
             return "unknown";
         }
     }
 
-    inline EDifficulty ByName(const String& name)
+    static EDifficulty* ByName(const String& name)
     {
         if (name == "peaceful")
         {
@@ -54,7 +66,6 @@ namespace mpp
             return EDifficulty::Peaceful;
         }
     }
+};
 
-
-
-}
+} // namespace mpp

@@ -2,12 +2,12 @@
 
 #include <Util/PropertiesFormat.h>
 
-#include <fstream>
 #include <ctime>
+#include <fstream>
 
 namespace mpp
 {
-Properties::Properties(const String& filePath) : m_filePath(filePath)
+Properties::Properties(const String& filePath) : m_filePath(filePath), m_failedToLoad(false), m_dirty(false)
 {
     m_failedToLoad = !Load();
 }
@@ -31,7 +31,7 @@ bool Properties::Load()
         {
             if (line.rfind("#", 0) == 0)
             {
-                m_comments.push_back(line);
+                m_comments.push_back(line.substr(1));
             }
             else
             {
@@ -46,6 +46,10 @@ bool Properties::Load()
 
 bool Properties::Save() const
 {
+    if (!m_dirty)
+    {
+        return false;
+    }
     std::ofstream file(m_filePath.c_str());
     if (file.is_open())
     {
@@ -71,10 +75,17 @@ bool Properties::HasKey(const String& key) const
 void Properties::SetValue(const String& key, const String& value)
 {
     m_properties[key] = value;
+    m_dirty = true;
 }
 
 void Properties::AddComment(const String& comment)
 {
     m_comments.push_back(comment);
+    m_dirty = true;
+}
+
+std::vector<String> Properties::GetComments() const
+{
+    return m_comments;
 }
 } // namespace mpp

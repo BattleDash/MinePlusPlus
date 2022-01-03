@@ -9,19 +9,17 @@ namespace mpp
 class EGamemode
 {
   public:
-    static const EGamemode* Survival;
-    static const EGamemode* Creative;
-    static const EGamemode* Adventure;
-    static const EGamemode* Spectator;
+    static EGamemode* Survival;
+    static EGamemode* Creative;
+    static EGamemode* Adventure;
+    static EGamemode* Spectator;
 
-    EGamemode(int id, const String& name) : m_id(id), m_name(name)
-    {
-    }
+    EGamemode(int id, const String& name);
 
     int m_id;
     String m_name;
 
-    inline const String ToString(const EGamemode* difficulty)
+    inline const String ToString(EGamemode* difficulty)
     {
         if (difficulty->m_id == EGamemode::Survival->m_id)
         {
@@ -45,7 +43,7 @@ class EGamemode
         }
     }
 
-    inline EGamemode* ByName(const String& name)
+    static EGamemode* ByName(const String& name)
     {
         if (name == "survival")
         {
@@ -65,14 +63,9 @@ class EGamemode
         }
         else
         {
-            return EGamemode::Survival;
+            return nullptr;
         }
     }
 };
-
-const EGamemode EGamemode::Survival = new EGamemode(0, "survival");
-const EGamemode EGamemode::Creative = new EGamemode(1, "creative");
-const EGamemode EGamemode::Adventure = new EGamemode(2, "adventure");
-const EGamemode EGamemode::Spectator = new EGamemode(3, "spectator");
 
 } // namespace mpp

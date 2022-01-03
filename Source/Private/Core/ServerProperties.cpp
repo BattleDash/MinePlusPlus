@@ -22,7 +22,7 @@ ServerProperties::ServerProperties(const String& filePath)
     resourcePack = properties.GetValue<String>("resource-pack", "");
     requireResourcePack = properties.GetValue<bool>("require-resource-pack", false);
     resourcePackPrompt = properties.GetValue<String>("resource-pack-prompt", "");
-    motd = properties.GetValue<String>("motd", "");
+    motd = properties.GetValue<String>("motd", "A Minecraft Server");
     forceGamemode = properties.GetValue<bool>("force-gamemode", false);
     enforceWhitelist = properties.GetValue<bool>("enforce-whitelist", false);
     difficulty = EDifficulty::ByName(properties.GetValue<String>("difficulty", "Peaceful"));
@@ -62,11 +62,12 @@ ServerProperties::ServerProperties(const String& filePath)
     entityBroadcastRangePercentage = properties.GetValue<int>("entity-broadcast-range-percentage", 100);
     textFilteringConfig = properties.GetValue<String>("text-filtering-config", "");
     playerIdleTimeout = properties.GetValue<int>("player-idle-timeout", 0);
-    whiteListEnabled = properties.GetValue<bool>("white-list", false);
-    if (!properties.IsLoaded())
+    whiteList = properties.GetValue<bool>("white-list", false);
+    MPP_LOG(LogLevel::Debug, properties.GetComments().size());
+    if (properties.GetComments().size() != 1)
     {
         properties.AddComment("Minecraft server properties");
-        properties.Save();
     }
+    properties.Save();
 }
 } // namespace mpp

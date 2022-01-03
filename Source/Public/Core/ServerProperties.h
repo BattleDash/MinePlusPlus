@@ -53,7 +53,7 @@ class ServerProperties
     int simulationDistance;
     int maxPlayers;
     int networkCompressionThreshold;
-    bool broadcasRconToOps;
+    bool broadcastRconToOps;
     bool broadcastConsoleToOps;
     int maxWorldSize;
     bool syncChunkWrites;
