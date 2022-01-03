@@ -1,8 +1,9 @@
 // Copyright BattleDash. All Rights Reserved.
 
-#include <Util/Properties.h>
+#include <Util/PropertiesFormat.h>
 
 #include <fstream>
+#include <ctime>
 
 namespace mpp
 {
@@ -25,10 +26,17 @@ bool Properties::Load()
     std::ifstream file(m_filePath.c_str());
     if (file.is_open())
     {
-        std::string line;
+        String line;
         while (std::getline(file, line))
         {
-            m_properties.insert(std::make_pair(line.substr(0, line.find('=')), line.substr(line.find('=') + 1)));
+            if (line.rfind("#", 0) == 0)
+            {
+                m_comments.push_back(line);
+            }
+            else
+            {
+                m_properties.insert(std::make_pair(line.substr(0, line.find('=')), line.substr(line.find('=') + 1)));
+            }
         }
         file.close();
         return true;
@@ -41,6 +49,10 @@ bool Properties::Save() const
     std::ofstream file(m_filePath.c_str());
     if (file.is_open())
     {
+        for (const String& comment : m_comments)
+        {
+            file << "#" << comment << std::endl;
+        }
         for (auto& property : m_properties)
         {
             file << property.first << "=" << property.second << std::endl;
@@ -59,5 +71,10 @@ bool Properties::HasKey(const String& key) const
 void Properties::SetValue(const String& key, const String& value)
 {
     m_properties[key] = value;
+}
+
+void Properties::AddComment(const String& comment)
+{
+    m_comments.push_back(comment);
 }
 } // namespace mpp

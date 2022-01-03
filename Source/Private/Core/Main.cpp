@@ -65,6 +65,7 @@ int RealMain(int argc, char** argv)
 {
     MPP_LOG(LogLevel::Info, "Starting MinePlusPlus version " << MPP_VERSION);
 
+// Enable ANSI color codes on Windows.
 #if defined(MPP_PLATFORM_WINDOWS)
     HANDLE stdoutHandle = GetStdHandle(STD_OUTPUT_HANDLE);
     DWORD dwMode;

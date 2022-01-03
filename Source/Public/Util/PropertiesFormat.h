@@ -8,6 +8,7 @@
 
 #include <map>
 #include <sstream>
+#include <vector>
 
 namespace mpp
 {
@@ -21,7 +22,7 @@ class Properties
     MPP_API bool Load();
     MPP_API bool Save() const;
     MPP_API bool HasKey(const String& key) const;
-    template <typename T> MPP_API T GetValue(const String& key, T def) const
+    template <typename T> MPP_API T GetValue(const String& key, T def)
     {
         if (HasKey(key))
         {
@@ -45,14 +46,17 @@ class Properties
                 return def;
             }
         }
+        SetValue(key, std::to_string(def));
         return def;
     }
 
     MPP_API void SetValue(const String& key, const String& value);
+    MPP_API void AddComment(const String& comment);
 
   private:
     String m_filePath;
     std::map<String, String> m_properties;
+    std::vector<String> m_comments;
     bool m_failedToLoad;
 };
 } // namespace mpp
