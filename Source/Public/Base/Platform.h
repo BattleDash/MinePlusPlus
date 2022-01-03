@@ -5,9 +5,17 @@
 namespace mpp
 {
 #if defined(MPP_EXPORTS)
-#    define MPP_API __declspec(dllexport)
+#    if defined(MPP_PLATFORM_WINDOWS)
+#        define MPP_API __declspec(dllexport)
+#    elif defined(MPP_PLATFORM_LINUX)
+#        define MPP_API __attribute__((visibility("default")))
+#    endif
 #else
-#    define MPP_API __declspec(dllimport)
+#    if defined(MPP_PLATFORM_WINDOWS)
+#        define MPP_API __declspec(dllimport)
+#    elif defined(MPP_PLATFORM_LINUX)
+#        define MPP_API
+#    endif
 #endif
 
 #if defined(MPP_PLATFORM_WINDOWS)
