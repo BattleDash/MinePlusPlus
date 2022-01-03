@@ -27,7 +27,7 @@ Settings ParseSettings(int argc, char** argv)
                        String(MPP_PLATFORM_NAME) + "-" + String(MPP_BUILD_CHANNEL_NAME) + "-" + String(MPP_VERSION));
     TCLAP::ValueArg<String> minePlusPlusSettingsFileArg("", "config", "MinePlusPlus configuration file", false, "",
                                                         "string", cmd);
-    TCLAP::ValueArg<String> propertiesFileArg("", "properties", "Minecraft properties file", false, "", "string", cmd);
+    TCLAP::ValueArg<String> propertiesFileArg("", "properties", "MinePlusPlus properties file", false, "server.properties", "string", cmd);
     TCLAP::ValueArg<String> dateFormatArg("", "date-format", "Date format", false, "", "string", cmd);
     TCLAP::SwitchArg eulaAgreeArg("", "eula-agree", "Agree to the Minecraft EULA", cmd, false);
     TCLAP::ValueArg<String> fileEncodingArg("", "file-encoding", "File encoding", false, "UTF-8", "string", cmd);

@@ -35,7 +35,11 @@ enum class LogLevel
 
 #define SHOULD_LOG(level) (level >= mpp::LogLevel::Current)
 
-#define STREAM_MESSAGE(message) std::cout << (std::stringstream() << message).str() << std::endl;
+// We could one-line this, but operator<< here returns an ostream, which doesn't have a str() method, and gcc doesn't like that.
+#define STREAM_MESSAGE(message)                                                                                        \
+    std::stringstream ss;                                                                                              \
+    ss << message;                                                                                                     \
+    std::cout << ss.str() << std::endl;
 
 #define MPP_LOG_INTERNAL_DEBUG(level, message)                                                                         \
     if (mpp::BuildChannel::Current == mpp::BuildChannel::Debug)                                                        \
