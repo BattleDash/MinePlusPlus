@@ -1,6 +1,7 @@
 // Copyright BattleDash. All Rights Reserved.
 
 #if defined(MPP_PLATFORM_LINUX)
+#    include <Base/Log.h>
 #    include <Server/Network/Socket/TCP/TCPSocketClient.h>
 
 #    include <arpa/inet.h>
@@ -18,7 +19,7 @@ TCPSocketClient::~TCPSocketClient()
     Close();
 }
 
-TCPSocketClient::Send(const void* data, size_t size)
+int TCPSocketClient::Send(const void* data, size_t size)
 {
     int sent = send(m_socket, (const char*)data, size, 0);
     if (sent == SOCKET_ERROR)
@@ -30,7 +31,7 @@ TCPSocketClient::Send(const void* data, size_t size)
     return sent;
 }
 
-TCPSocketClient::Receive(void* data, size_t size)
+int TCPSocketClient::Receive(void* data, size_t size)
 {
     int received = recv(m_socket, (char*)data, size, 0);
     if (received == SOCKET_ERROR)
