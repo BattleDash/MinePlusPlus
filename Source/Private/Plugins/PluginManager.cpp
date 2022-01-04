@@ -49,7 +49,7 @@ WrappedPlugin* PluginManager::LoadPlugin(const std::string& pluginPath)
                 if (pluginFunction == nullptr)
                 {
                     dlclose(pluginLibrary);
-                    MPP_LOG(LogLevel::Error, "Could not load '" << pluginLibraryFullPath.string()
+                    MPP_LOG(LogLevel::Error, "Could not load '" << pluginFilePath.string()
                                                                 << "'. Could not find CreatePlugin function.");
                     return NULL;
                 }
