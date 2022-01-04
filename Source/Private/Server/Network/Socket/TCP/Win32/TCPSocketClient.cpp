@@ -8,11 +8,11 @@
 #    include <winsock2.h>
 #    include <ws2tcpip.h>
 
-#pragma comment(lib, "Ws2_32.lib")
+#    pragma comment(lib, "Ws2_32.lib")
 
 namespace mpp
 {
-TCPSocketClient::TCPSocketClient(int socket) : m_socket(socket)
+TCPSocketClient::TCPSocketClient(int socket) : m_socket(socket), m_pipeline(new SocketPipeline()), m_connected(true)
 {
 }
 
@@ -45,8 +45,14 @@ int TCPSocketClient::Receive(void* data, size_t size)
     return received;
 }
 
+SocketPipeline* TCPSocketClient::Pipeline()
+{
+    return m_pipeline;
+}
+
 void TCPSocketClient::Close()
 {
+    closesocket(m_socket);
 }
 } // namespace mpp
 #endif

@@ -2,20 +2,27 @@
 
 #pragma once
 
+#include <Base/Platform.h>
 #include <Base/String.h>
+
+#include <Server/Network/Socket/TCP/SocketPipeline.h>
 
 namespace mpp
 {
-    class TCPSocketClient
-    {
-    public:
-        TCPSocketClient(int socket);
-        ~TCPSocketClient();
+class TCPSocketClient
+{
+  public:
+    MPP_API TCPSocketClient(int socket);
+    MPP_API ~TCPSocketClient();
 
-        int Send(const void* data, size_t size);
-        int Receive(void* data, size_t size);
-        void Close();
-    private:
-        int m_socket;
-    };
-}
+    MPP_API int Send(const void* data, size_t size);
+    MPP_API int Receive(void* data, size_t size);
+    MPP_API SocketPipeline* Pipeline();
+    MPP_API void Close();
+
+    bool m_connected;
+  private:
+    SocketPipeline* m_pipeline;
+    int m_socket;
+};
+} // namespace mpp

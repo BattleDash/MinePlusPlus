@@ -59,7 +59,7 @@ void DedicatedServer::InitializeServer()
     m_serverConnection = new ServerConnection(this);
     m_serverConnection->StartTCPServer(m_properties->serverIp, m_properties->serverPort);
 
-    new RemoteStatusListener(this, m_properties->serverIp, m_properties->serverPort);
+    //new RemoteStatusListener(this, m_properties->serverIp, m_properties->serverPort);
 
     while (true)
     {

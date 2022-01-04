@@ -24,8 +24,8 @@ enum class LogLevel
 };
 
 // These are a mess purely because of clang-format. I apologize to your eyes.
-// We need this because we can't use X Macros for LogLevel (#level), or else the output will be "LogLevel::Info", instead of just "Info".
-// If you have a better solution, feel free to make a PR or an issue.
+// We need this because we can't use X Macros for LogLevel (#level), or else the output will be "LogLevel::Info",
+// instead of just "Info". If you have a better solution, feel free to make a PR or an issue.
 #define MPP_LOG_LEVEL_TO_STRING(level)                                                                                 \
     (level == mpp::LogLevel::Debug                                                                                     \
          ? "Debug"                                                                                                     \
@@ -52,8 +52,8 @@ enum class LogLevel
 // like that.
 #define STREAM_MESSAGE(message)                                                                                        \
     std::stringstream ss;                                                                                              \
-    ss << message;                                                                                                     \
-    std::cout << ss.str() << std::endl;
+    ss << message << std::endl;                                                                                        \
+    std::cout << ss.str();
 
 #define MPP_LOG_INTERNAL_DEBUG(level, message)                                                                         \
     if (mpp::BuildChannel::Current == mpp::BuildChannel::Debug)                                                        \

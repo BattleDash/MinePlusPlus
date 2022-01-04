@@ -57,7 +57,7 @@ bool UDPSocket::Listen(const String& ip, int port)
     address.sin_port = htons(port);
     address.sin_addr.s_addr = inet_addr(ip.c_str());
 
-    if (bind(m_socket, (sockaddr*)&address, sizeof(sockaddr_in)) == -1)
+    if (bind(m_socket, (sockaddr*)&address, sizeof(sockaddr_in)) == INVALID_SOCKET)
     {
         MPP_LOG(LogLevel::Error, "Failed to bind socket. " << WSAGetLastError());
         return false;
