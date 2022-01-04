@@ -11,6 +11,8 @@
 #    include <sys/types.h>
 #    include <unistd.h>
 
+#    define INVALID_SOCKET -1
+
 namespace mpp
 {
 UDPSocket::UDPSocket() : m_socket(-1)
