@@ -4,6 +4,7 @@
 #include <Server/Network/ServerConnection.h>
 #include <Server/Network/LegacyPingHandler.h>
 #include <Server/Network/PacketSplitter.h>
+#include <Server/Network/PacketDecoder.h>
 
 namespace mpp
 {
@@ -24,7 +25,8 @@ void ServerConnection::StartTCPServer(String host, int port)
     m_socketManager->ChildHandler([this](TCPSocketClient* client) {
         client->Pipeline()
             ->AddLast("legacy_query", new LegacyPingHandler(this))
-            ->AddLast("packet_splitter", new PacketSplitter());
+            ->AddLast("packet_splitter", new PacketSplitter())
+            ->AddLast("decoder", new PacketDecoder(EProtocolDirection::SERVERBOUND));
     });
     m_socketManager->Listen(host, port);
 }
