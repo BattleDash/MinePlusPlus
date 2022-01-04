@@ -5,6 +5,10 @@
 #include <Base/Platform.h>
 #include <Base/String.h>
 
+#if defined(MPP_PLATFORM_LINUX)
+#    include <string.h>
+#endif
+
 namespace mpp
 {
 class SocketAddress
@@ -36,6 +40,7 @@ class SocketAddress
     {
         return m_length;
     }
+
   private:
     unsigned char m_address[64];
     unsigned char m_length;
