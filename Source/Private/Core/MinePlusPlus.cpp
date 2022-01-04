@@ -53,7 +53,6 @@ void MinePlusPlus::StartServer()
 
     MPP_LOG(LogLevel::Info, "Loading properties");
     ServerProperties properties = ServerProperties(m_settings.propertiesFile, m_settings);
-    //DedicatedServer server(properties);
     std::thread serverThread(&DedicatedServer::InitializeServer, new DedicatedServer(&properties));
     serverThread.join();
 }

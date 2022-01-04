@@ -4,14 +4,18 @@
 #include <Base/Version.h>
 #include <Core/ServerProperties.h>
 #include <Server/DedicatedServer.h>
+#include <Server/Rcon/RemoteStatusListener.h>
 
 #include <chrono>
 #include <thread>
 
+#if defined(MPP_PLATFORM_WINDOWS)
+#    include <winsock2.h>
+#endif
+
 namespace mpp
 {
-DedicatedServer::DedicatedServer(const ServerProperties* properties)
-: MinecraftServer(properties)
+DedicatedServer::DedicatedServer(const ServerProperties* properties) : MinecraftServer(properties)
 {
 }
 
@@ -33,8 +37,29 @@ void DedicatedServer::InitializeServer()
 
     MPP_LOG(LogLevel::Info, "Loaded and enabled plugins");
 
+#if defined(MPP_PLATFORM_WINDOWS)
+    WORD wVersionRequested = MAKEWORD(2, 2);
+    WSADATA wsaData;
+    int error = 0;
+    error = WSAStartup(wVersionRequested, &wsaData);
+    if (error != 0)
+    {
+        MPP_LOG(LogLevel::Fatal, "Failed to initialize WSA");
+        return;
+    }
+
+    if (LOBYTE(wsaData.wVersion) != LOBYTE(wVersionRequested) || HIBYTE(wsaData.wVersion) != HIBYTE(wVersionRequested))
+    {
+        MPP_LOG(LogLevel::Fatal, "You are using an invalid version of WSA");
+        WSACleanup();
+        return;
+    }
+#endif
+
     m_serverConnection = new ServerConnection(this);
     m_serverConnection->StartTCPServer(m_properties->serverIp, m_properties->serverPort);
+
+    new RemoteStatusListener(this, m_properties->serverIp, m_properties->serverPort);
 
     while (true)
     {

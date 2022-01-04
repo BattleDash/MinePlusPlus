@@ -36,7 +36,7 @@ enum class LogLevel
 
 #define MPP_LOG_LEVEL_COLOR(level)                                                                                     \
     (level == mpp::LogLevel::Debug                                                                                     \
-         ? "\x1B[37m"                                                                                                  \
+         ? "\x1B[34m"                                                                                                  \
          : (level == mpp::LogLevel::Info                                                                               \
                 ? ""                                                                                                   \
                 : (level == mpp::LogLevel::Warning                                                                     \

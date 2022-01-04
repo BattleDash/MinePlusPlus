@@ -14,7 +14,7 @@ ServerProperties::ServerProperties(const String& filePath, const StartupSettings
     Properties properties = Properties(filePath);
     onlineMode = startupSettings.onlineMode || properties.GetValue<bool>("online-mode", true);
     preventProxyConnections = properties.GetValue<bool>("prevent-proxy-connections", false);
-    serverIp = startupSettings.host.empty() ? properties.GetValue<String>("server-ip", "") : startupSettings.host;
+    serverIp = startupSettings.host.empty() ? properties.GetValue<String>("server-ip", "0.0.0.0") : startupSettings.host;
     spawnAnimals = properties.GetValue<bool>("spawn-animals", true);
     spawnNpcs = properties.GetValue<bool>("spawn-npcs", true);
     pvp = properties.GetValue<bool>("pvp", true);

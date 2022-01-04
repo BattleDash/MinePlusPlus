@@ -3,18 +3,20 @@
 #include <Base/Platform.h>
 #include <Base/String.h>
 
+#include <Server/Network/Socket/TCP/TCPSocketClient.h>
+
 namespace mpp
 {
 class TCPSocketManager
 {
   public:
-    TCPSocketManager();
-    ~TCPSocketManager();
+    MPP_API TCPSocketManager();
+    MPP_API ~TCPSocketManager();
 
-    TCPSocket& Accept();
-    void Close();
+    MPP_API TCPSocketClient& Accept();
+    MPP_API void Close();
 
-    bool IsListening() const;
+    MPP_API bool IsListening() const;
 
   private:
     bool m_connected;

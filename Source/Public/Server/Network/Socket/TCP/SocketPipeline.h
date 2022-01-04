@@ -16,10 +16,10 @@ class SocketPipeline
     MPP_API SocketPipeline();
     MPP_API ~SocketPipeline();
 
-    MPP_API void AddLast(String name, ChannelInboundHandler* handler);
-    MPP_API void Remove(String name);
+    MPP_API SocketPipeline AddLast(String name, ChannelInboundHandler* handler);
+    MPP_API ChannelInboundHandler Remove(String name);
 
   private:
-    std::vector<ChannelInboundHandler*> m_handlers;
+    std::vector<std::pair<String, ChannelInboundHandler*>> m_handlers;
 };
 } // namespace mpp
