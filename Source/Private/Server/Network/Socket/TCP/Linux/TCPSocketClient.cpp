@@ -22,7 +22,7 @@ TCPSocketClient::~TCPSocketClient()
 int TCPSocketClient::Send(const void* data, size_t size)
 {
     int sent = send(m_socket, (const char*)data, size, 0);
-    if (sent == SOCKET_ERROR)
+    if (sent == SO_ERROR)
     {
         MPP_LOG(LogLevel::Error, "Failed to send data to client.");
         return -1;
@@ -34,7 +34,7 @@ int TCPSocketClient::Send(const void* data, size_t size)
 int TCPSocketClient::Receive(void* data, size_t size)
 {
     int received = recv(m_socket, (char*)data, size, 0);
-    if (received == SOCKET_ERROR)
+    if (received == SO_ERROR)
     {
         MPP_LOG(LogLevel::Error, "Failed to receive data from client.");
         return -1;
