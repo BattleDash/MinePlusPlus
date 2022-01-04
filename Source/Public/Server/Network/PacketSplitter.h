@@ -9,15 +9,11 @@
 
 namespace mpp
 {
-class LegacyPingHandler : public ChannelInboundHandlerAdapter
+class PacketSplitter : public ChannelInboundHandlerAdapter
 {
   public:
-    MPP_API LegacyPingHandler(ServerConnection* serverConnection);
+    MPP_API PacketSplitter();
 
-    MPP_API bool AttemptHandlePingPacket(ChannelHandlerContext* context, ByteBuf* byteBuf);
     MPP_API void ChannelRead(ChannelHandlerContext* context, void* object) override;
-
-  private:
-    ServerConnection* m_serverConnection;
 };
 } // namespace mpp

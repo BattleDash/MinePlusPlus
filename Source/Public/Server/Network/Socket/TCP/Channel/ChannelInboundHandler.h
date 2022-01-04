@@ -3,21 +3,28 @@
 #pragma once
 
 #include <Base/Platform.h>
+#include <Server/Network/Socket/TCP/Channel/ChannelHandler.h>
+#include <Server/Network/Socket/TCP/Channel/ChannelHandlerContext.h>
 
 namespace mpp
 {
-class ChannelInboundHandler
+class ChannelInboundHandler : public ChannelHandler
 {
   public:
-    MPP_API virtual void ChannelRegistered() = 0;
-    MPP_API virtual void ChannelUnregistered() = 0;
-    MPP_API virtual void ChannelActive() = 0;
-    MPP_API virtual void ChannelInactive() = 0;
-    MPP_API virtual void ChannelIdle() = 0;
-    MPP_API virtual void ChannelRead(void* object) = 0;
-    MPP_API virtual void ChannelReadComplete() = 0;
-    MPP_API virtual void UserEventTriggered(void* object) = 0;
-    MPP_API virtual void ChannelWritabilityChanged() = 0;
-    MPP_API virtual void ExceptionCaught(void* object) = 0;
+    MPP_API ChannelHandlerType Type() override
+    {
+        return ChannelHandlerType::Inbound;
+    }
+
+    MPP_API virtual void ChannelRegistered(ChannelHandlerContext* context) = 0;
+    MPP_API virtual void ChannelUnregistered(ChannelHandlerContext* context) = 0;
+    MPP_API virtual void ChannelActive(ChannelHandlerContext* context) = 0;
+    MPP_API virtual void ChannelInactive(ChannelHandlerContext* context) = 0;
+    MPP_API virtual void ChannelIdle(ChannelHandlerContext* context) = 0;
+    MPP_API virtual void ChannelRead(ChannelHandlerContext* context, void* object) = 0;
+    MPP_API virtual void ChannelReadComplete(ChannelHandlerContext* context) = 0;
+    MPP_API virtual void UserEventTriggered(ChannelHandlerContext* context, void* object) = 0;
+    MPP_API virtual void ChannelWritabilityChanged(ChannelHandlerContext* context) = 0;
+    MPP_API virtual void ExceptionCaught(ChannelHandlerContext* context, void* object) = 0;
 };
 } // namespace mpp

@@ -10,34 +10,34 @@ namespace mpp
 class ChannelInboundHandlerAdapter : public ChannelInboundHandler
 {
   public:
-    MPP_API void ChannelRegistered() override
+    MPP_API void ChannelRegistered(ChannelHandlerContext* context) override
     {
     }
-    MPP_API void ChannelUnregistered() override
+    MPP_API void ChannelUnregistered(ChannelHandlerContext* context) override
     {
     }
-    MPP_API void ChannelActive() override
+    MPP_API void ChannelActive(ChannelHandlerContext* context) override
     {
     }
-    MPP_API void ChannelInactive() override
+    MPP_API void ChannelInactive(ChannelHandlerContext* context) override
     {
     }
-    MPP_API void ChannelIdle() override
+    MPP_API void ChannelIdle(ChannelHandlerContext* context) override
     {
     }
-    MPP_API void ChannelRead(void* object) override
+    MPP_API void ChannelRead(ChannelHandlerContext* context, void* object) override
     {
     }
-    MPP_API void ChannelReadComplete() override
+    MPP_API void ChannelReadComplete(ChannelHandlerContext* context) override
     {
     }
-    MPP_API void UserEventTriggered(void* object) override
+    MPP_API void UserEventTriggered(ChannelHandlerContext* context, void* object) override
     {
     }
-    MPP_API void ChannelWritabilityChanged() override
+    MPP_API void ChannelWritabilityChanged(ChannelHandlerContext* context) override
     {
     }
-    MPP_API void ExceptionCaught(void* object) override
+    MPP_API void ExceptionCaught(ChannelHandlerContext* context, void* object) override
     {
     }
 };

@@ -7,13 +7,11 @@
 
 namespace mpp
 {
-    class Eula
-    {
-    public:
-        MPP_API Eula(const String& filePath);
+class Eula
+{
+  public:
+    MPP_API Eula(const String& filePath);
 
-        MPP_API bool IsAccepted() const;
-    private:
-        bool m_accepted;
-    };
-}
+    bool m_accepted;
+};
+} // namespace mpp

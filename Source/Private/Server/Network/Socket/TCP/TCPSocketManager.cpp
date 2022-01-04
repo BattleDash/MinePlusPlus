@@ -2,6 +2,8 @@
 
 #include <Base/Log.h>
 #include <Server/Network/Socket/TCP/TCPSocketManager.h>
+#include <Server/Network/Buffer/UnpooledDirectByteBuf.h>
+#include <Server/Network/Socket/TCP/Channel/ChannelInboundHandler.h>
 
 namespace mpp
 {
@@ -62,12 +64,19 @@ void TCPSocketManager::Run()
                 if (size > 0)
                 {
                     MPP_LOG(LogLevel::Debug, "Received " << size << " bytes");
-                    for (std::pair<String, ChannelInboundHandler*> pair : client->Pipeline()->Handlers())
+                    UnpooledDirectByteBuf* buf = new UnpooledDirectByteBuf(size, size);
+                    ChannelHandlerContext* ctx = new ChannelHandlerContext(client);
+                    for (std::pair<String, ChannelHandler*> pair : client->Pipeline()->Handlers())
                     {
-                        pair.second->ChannelRead(buffer);
+                        // Check if ChannelHandler is ChannelInboundHandler
+                        if (pair.second->Type() == ChannelHandlerType::Inbound)
+                        {
+                            ChannelInboundHandler* handler = (ChannelInboundHandler*)pair.second;
+                            handler->ChannelRead(ctx, (void*) buf);
+                        }
                     }
                 }
-                else
+                else if (size <= 0)
                 {
                     client->m_connected = false;
                 }

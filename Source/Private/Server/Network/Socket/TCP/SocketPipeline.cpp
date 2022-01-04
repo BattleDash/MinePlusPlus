@@ -13,13 +13,13 @@ SocketPipeline::~SocketPipeline()
 {
     for (auto it = m_handlers.begin(); it != m_handlers.end();)
     {
-        std::pair<String, ChannelInboundHandler*> pair = *it;
+        std::pair<String, ChannelHandler*> pair = *it;
         delete pair.second;
         it = m_handlers.erase(it);
     }
 }
 
-SocketPipeline* SocketPipeline::AddLast(String name, ChannelInboundHandler* handler)
+SocketPipeline* SocketPipeline::AddLast(String name, ChannelHandler* handler)
 {
     if (Get(name) != nullptr)
     {
@@ -30,7 +30,7 @@ SocketPipeline* SocketPipeline::AddLast(String name, ChannelInboundHandler* hand
     return this;
 }
 
-ChannelInboundHandler* SocketPipeline::Get(String name)
+ChannelHandler* SocketPipeline::Get(String name)
 {
     for (auto it = m_handlers.begin(); it != m_handlers.end(); ++it)
     {
@@ -42,7 +42,7 @@ ChannelInboundHandler* SocketPipeline::Get(String name)
     return nullptr;
 }
 
-std::vector<std::pair<String, ChannelInboundHandler*>>& SocketPipeline::Handlers()
+std::vector<std::pair<String, ChannelHandler*>>& SocketPipeline::Handlers()
 {
     return m_handlers;
 }

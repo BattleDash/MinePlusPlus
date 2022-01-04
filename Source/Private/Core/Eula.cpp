@@ -16,9 +16,4 @@ Eula::Eula(const String& filePath) : m_accepted(false)
         properties.Save();
     }
 }
-
-bool Eula::IsAccepted() const
-{
-    return m_accepted;
-}
 } // namespace mpp

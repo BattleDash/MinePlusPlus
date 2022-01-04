@@ -43,7 +43,7 @@ void MinePlusPlus::StartServer()
     else
     {
         Eula eula("eula.txt");
-        if (!eula.IsAccepted())
+        if (!eula.m_accepted)
         {
             MPP_LOG(LogLevel::Fatal,
                     "You must accept the EULA before using MinePlusPlus! See eula.txt for more information.");

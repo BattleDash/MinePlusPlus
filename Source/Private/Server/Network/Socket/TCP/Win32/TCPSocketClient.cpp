@@ -44,7 +44,7 @@ int TCPSocketClient::Receive(void* data, size_t size)
 {
     int received = recv(m_socket, (char*)data, size, 0);
     if (received == SOCKET_ERROR)
-    {   
+    {
         int code = WSAGetLastError();
         if (code == WSAEWOULDBLOCK)
         {
@@ -58,11 +58,6 @@ int TCPSocketClient::Receive(void* data, size_t size)
     }
 
     return received;
-}
-
-SocketPipeline* TCPSocketClient::Pipeline()
-{
-    return m_pipeline;
 }
 
 void TCPSocketClient::Close()

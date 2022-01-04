@@ -33,6 +33,6 @@ else()
     target_link_libraries(MinePlusPlus PRIVATE Threads::Threads dl)
 endif()
 
-target_compile_definitions(MinePlusPlus PRIVATE MPP_EXPORTS MPP_FORCE_DEBUG_LOGS)
+target_compile_definitions(MinePlusPlus PRIVATE MPP_EXPORTS MPP_DEBUG MPP_FORCE_DEBUG_LOGS)
 
 add_subdirectory(Examples/ExamplePlugin)
