@@ -1,9 +1,9 @@
 // Copyright BattleDash. All Rights Reserved.
 
 #include <Base/Log.h>
-#include <Server/Network/Socket/TCP/TCPSocketManager.h>
 #include <Server/Network/Buffer/UnpooledDirectByteBuf.h>
 #include <Server/Network/Socket/TCP/Channel/ChannelInboundHandler.h>
+#include <Server/Network/Socket/TCP/TCPSocketManager.h>
 
 namespace mpp
 {
@@ -63,17 +63,19 @@ void TCPSocketManager::Run()
                 int size = client->Receive(buffer, sizeof(buffer));
                 if (size > 0)
                 {
-                    MPP_LOG(LogLevel::Debug, "Received " << size << " bytes");
-                    UnpooledDirectByteBuf* buf = new UnpooledDirectByteBuf(size, size);
-                    ChannelHandlerContext* ctx = new ChannelHandlerContext(client);
-                    for (std::pair<String, ChannelHandler*> pair : client->Pipeline()->Handlers())
+                    try
                     {
-                        // Check if ChannelHandler is ChannelInboundHandler
-                        if (pair.second->Type() == ChannelHandlerType::Inbound)
-                        {
-                            ChannelInboundHandler* handler = (ChannelInboundHandler*)pair.second;
-                            handler->ChannelRead(ctx, (void*) buf);
-                        }
+                        UnpooledDirectByteBuf* buf = new UnpooledDirectByteBuf(0, size);
+                        buf->WriteBytes(buffer, 0, size);
+                        ChannelHandlerContext* ctx = client->Pipeline()->m_head;
+                        MPP_LOG(LogLevel::Debug, "Received " << size << " bytes");
+                        MPP_LOG(LogLevel::Debug, "Pipeline is " << client->Pipeline()->ToString());
+                        ctx->FireChannelRead(buf);
+                        MPP_LOG(LogLevel::Debug, "Pipeline complete");
+                    }
+                    catch (const std::exception& e)
+                    {
+                        MPP_LOG(LogLevel::Error, "Exception: " << e.what());
                     }
                 }
                 else if (size <= 0)

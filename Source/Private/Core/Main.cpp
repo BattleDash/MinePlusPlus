@@ -92,7 +92,7 @@ int RealMain(int argc, char** argv)
         {
             MPP_LOG(LogLevel::Fatal, "Unhandled exception");
         }
-        std::abort();
+        //std::abort();
     });
 
     try

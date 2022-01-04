@@ -13,7 +13,6 @@ bool LegacyPingHandler::AttemptHandlePingPacket(ChannelHandlerContext* context, 
 {
     if (byteBuf->ReadUnsignedByte() != 254)
     {
-        MPP_LOG(LogLevel::Debug, "First unsigned byte was not 254");
         return false;
     }
 
@@ -43,10 +42,8 @@ void LegacyPingHandler::ChannelRead(ChannelHandlerContext* context, void* object
     if (!AttemptHandlePingPacket(context, byteBuf))
     {
         byteBuf->ResetReaderIndex();
-        //context->m_socket->Pipeline()->Remove("legacy_query");
-        //context->FireChannelRead(object);
+        context->m_pipeline->Remove("legacy_query");
+        context->FireChannelRead(object);
     }
-
-    MPP_LOG(LogLevel::Debug, "Read from LegacyPingHandler");
 }
 } // namespace mpp

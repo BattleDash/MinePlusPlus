@@ -12,8 +12,6 @@ namespace mpp
 class PacketSplitter : public ChannelInboundHandlerAdapter
 {
   public:
-    MPP_API PacketSplitter();
-
     MPP_API void ChannelRead(ChannelHandlerContext* context, void* object) override;
 };
 } // namespace mpp

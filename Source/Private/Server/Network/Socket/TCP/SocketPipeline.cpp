@@ -5,57 +5,85 @@
 
 namespace mpp
 {
-SocketPipeline::SocketPipeline()
+HeadContext::HeadContext(SocketPipeline* pipeline)
+    : ChannelHandlerContext(pipeline, "mpp_internal_pipeline_head", this), ChannelInboundHandlerAdapter()
 {
+}
+
+TailContext::TailContext(SocketPipeline* pipeline)
+    : ChannelHandlerContext(pipeline, "mpp_internal_pipeline_tail", this), ChannelInboundHandlerAdapter()
+{
+}
+
+void TailContext::ChannelRead(ChannelHandlerContext* context, void* object)
+{
+}
+
+SocketPipeline::SocketPipeline() : m_head(new HeadContext(this)), m_tail(new TailContext(this))
+{
+    m_head->m_next = m_tail;
+    m_tail->m_prev = m_head;
 }
 
 SocketPipeline::~SocketPipeline()
 {
-    for (auto it = m_handlers.begin(); it != m_handlers.end();)
-    {
-        std::pair<String, ChannelHandler*> pair = *it;
-        delete pair.second;
-        it = m_handlers.erase(it);
-    }
+    // delete m_head;
+    // delete m_tail;
 }
 
-SocketPipeline* SocketPipeline::AddLast(String name, ChannelHandler* handler)
+SocketPipeline* SocketPipeline::AddLast(const String& name, ChannelHandler* handler)
 {
-    if (Get(name) != nullptr)
-    {
-        MPP_LOG(LogLevel::Error, "Channel already exists");
-        return this;
-    }
-    m_handlers.push_back(std::make_pair(name, handler));
+    MPP_ASSERT(handler != nullptr);
+
+    ChannelHandlerContext* newCtx = new ChannelHandlerContext(this, name, handler);
+    ChannelHandlerContext* prev = m_tail->m_prev;
+    newCtx->m_prev = prev;
+    newCtx->m_next = m_tail;
+    prev->m_next = newCtx;
+    m_tail->m_prev = newCtx;
+
     return this;
 }
 
-ChannelHandler* SocketPipeline::Get(String name)
+ChannelHandlerContext* SocketPipeline::Get(const String& name)
 {
-    for (auto it = m_handlers.begin(); it != m_handlers.end(); ++it)
+    ChannelHandlerContext* ctx = m_head->m_next;
+    while (ctx != m_tail)
     {
-        if (it->first == name)
+        if (ctx->m_name == name)
         {
-            return it->second;
+            return ctx;
         }
+        ctx = ctx->m_next;
     }
     return nullptr;
 }
 
-std::vector<std::pair<String, ChannelHandler*>>& SocketPipeline::Handlers()
+void SocketPipeline::Remove(const String& name)
 {
-    return m_handlers;
+    ChannelHandlerContext* ctx = Get(name);
+    MPP_ASSERT(ctx != nullptr);
+    MPP_ASSERT(ctx != m_head && ctx != m_tail);
+
+    ChannelHandlerContext* prev = ctx->m_prev;
+    ChannelHandlerContext* next = ctx->m_next;
+    prev->m_next = next;
+    next->m_prev = prev;
 }
 
-void SocketPipeline::Remove(String name)
+const String SocketPipeline::ToString()
 {
-    for (auto it = m_handlers.begin(); it != m_handlers.end(); ++it)
+    String string = "";
+    ChannelHandlerContext* ctx = m_head->m_next;
+    while (ctx != m_tail)
     {
-        if (it->first == name)
+        string += ctx->m_name;
+        ctx = ctx->m_next;
+        if (ctx != m_tail)
         {
-            m_handlers.erase(it);
-            break;
+            string += " -> ";
         }
     }
+    return string;
 }
 } // namespace mpp

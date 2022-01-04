@@ -18,6 +18,7 @@ class AbstractByteBuf : public ByteBuf
     MPP_API void MaxCapacity(int maxCapacity) override;
     MPP_API int ReaderIndex() override;
     MPP_API static void CheckIndexBounds(int readerIndex, int writerIndex, int capacity);
+    MPP_API void CheckReadableBytes(int minimumReadableBytes);
     MPP_API ByteBuf& ReaderIndex(int readerIndex) override;
     MPP_API int WriterIndex() override;
     MPP_API ByteBuf& WriterIndex(int writerIndex) override;

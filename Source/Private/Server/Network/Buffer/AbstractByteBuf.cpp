@@ -52,9 +52,20 @@ void AbstractByteBuf::CheckIndexBounds(int readerIndex, int writerIndex, int cap
     }
 }
 
+void AbstractByteBuf::CheckReadableBytes(int minimumReadableBytes)
+{
+    if (m_readerIndex > m_writerIndex - minimumReadableBytes)
+    {
+        std::stringstream ss;
+        ss << "readerIndex(" << m_readerIndex << ") + length(" << minimumReadableBytes << ") exceeds writerIndex("
+           << m_writerIndex << ")";
+        throw std::out_of_range(ss.str());
+    }
+}
+
 ByteBuf& AbstractByteBuf::ReaderIndex(int readerIndex)
 {
-    CheckIndexBounds(readerIndex, m_writerIndex, m_maxCapacity);
+    CheckIndexBounds(readerIndex, m_writerIndex, Capacity());
     m_readerIndex = readerIndex;
     return *this;
 }
@@ -66,14 +77,14 @@ int AbstractByteBuf::WriterIndex()
 
 ByteBuf& AbstractByteBuf::WriterIndex(int writerIndex)
 {
-    CheckIndexBounds(m_readerIndex, writerIndex, m_maxCapacity);
+    CheckIndexBounds(m_readerIndex, writerIndex, Capacity());
     m_writerIndex = writerIndex;
     return *this;
 }
 
 ByteBuf& AbstractByteBuf::SetIndex(int readerIndex, int writerIndex)
 {
-    CheckIndexBounds(readerIndex, writerIndex, m_maxCapacity);
+    CheckIndexBounds(readerIndex, writerIndex, Capacity());
     m_readerIndex = readerIndex;
     m_writerIndex = writerIndex;
     return *this;

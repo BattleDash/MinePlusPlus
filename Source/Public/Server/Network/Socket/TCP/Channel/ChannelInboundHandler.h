@@ -11,11 +11,6 @@ namespace mpp
 class ChannelInboundHandler : public ChannelHandler
 {
   public:
-    MPP_API ChannelHandlerType Type() override
-    {
-        return ChannelHandlerType::Inbound;
-    }
-
     MPP_API virtual void ChannelRegistered(ChannelHandlerContext* context) = 0;
     MPP_API virtual void ChannelUnregistered(ChannelHandlerContext* context) = 0;
     MPP_API virtual void ChannelActive(ChannelHandlerContext* context) = 0;

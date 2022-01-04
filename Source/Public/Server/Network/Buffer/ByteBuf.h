@@ -40,5 +40,7 @@ class ByteBuf
     MPP_API virtual uint8_t ReadByte() = 0;
     MPP_API virtual bool ReadBoolean() = 0;
     MPP_API virtual uint8_t ReadUnsignedByte() = 0;
+    MPP_API virtual ByteBuf* ReadBytes(int length) = 0;
+    MPP_API virtual void WriteBytes(void* src, int srcIndex, int length) = 0;
 };
 } // namespace mpp

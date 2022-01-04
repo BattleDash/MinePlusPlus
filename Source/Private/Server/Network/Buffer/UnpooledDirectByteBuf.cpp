@@ -1,5 +1,6 @@
 // Copyright BattleDash. All Rights Reserved.
 
+#include <Base/Log.h>
 #include <Server/Network/Buffer/UnpooledDirectByteBuf.h>
 
 #include <stdexcept>
@@ -25,4 +26,20 @@ uint8_t UnpooledDirectByteBuf::_GetByte(int index)
 {
     return m_buffer[index];
 }
+
+ByteBuf* UnpooledDirectByteBuf::ReadBytes(int length)
+{
+    CheckReadableBytes(length);
+    UnpooledDirectByteBuf* newBuf = new UnpooledDirectByteBuf(length, m_capacity);
+    memcpy(newBuf->m_buffer, m_buffer + m_readerIndex, length);
+    m_readerIndex += length;
+    return newBuf;
+}
+
+void UnpooledDirectByteBuf::WriteBytes(void* src, int srcIndex, int length)
+{
+    memcpy(m_buffer + m_writerIndex, src, length);
+    m_writerIndex += length;
+}
+
 } // namespace mpp

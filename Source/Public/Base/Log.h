@@ -9,6 +9,7 @@
 #include <sstream>
 #include <stdio.h>
 #include <string>
+#include <cassert>
 
 namespace mpp
 {
@@ -89,4 +90,15 @@ enum class LogLevel
             MPP_LOG_INTERNAL(level, message);                                                                          \
         }                                                                                                              \
     }
+
+// Assertions
+#define MPP_ASSERT_DESC(condition, message)                                                                            \
+    if (!(condition))                                                                                                  \
+    {                                                                                                                  \
+        MPP_LOG(mpp::LogLevel::Fatal, message);                                                                        \
+        assert(condition);                                                                                             \
+    }
+
+#define MPP_ASSERT(condition) MPP_ASSERT_DESC(condition, "Assertion failed: " #condition)
+
 } // namespace mpp

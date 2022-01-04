@@ -4,19 +4,23 @@
 
 #include <Base/Platform.h>
 #include <Base/String.h>
-#include <Server/Network/Socket/TCP/SocketPipeline.h>
 #include <Server/Network/Socket/TCP/Channel/ChannelHandler.h>
 
 namespace mpp
 {
+class SocketPipeline;
+
 class ChannelHandlerContext
 {
   public:
-    MPP_API ChannelHandlerContext(SocketPipeline* socket, const String& name, ChannelHandler* handler);
+    MPP_API ChannelHandlerContext(SocketPipeline* pipeline, const String& name, ChannelHandler* handler);
 
-    MPP_API virtual ChannelHandlerContext& FireChannelRead(void* object) = 0;
+    MPP_API ChannelHandlerContext& FireChannelRead(void* object);
 
-    SocketPipeline* m_socket;
+    ChannelHandlerContext* m_next;
+    ChannelHandlerContext* m_prev;
+
+    SocketPipeline* m_pipeline;
     String m_name;
     ChannelHandler* m_handler;
 };

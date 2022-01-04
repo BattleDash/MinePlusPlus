@@ -27,6 +27,7 @@ class ChannelInboundHandlerAdapter : public ChannelInboundHandler
     }
     MPP_API void ChannelRead(ChannelHandlerContext* context, void* object) override
     {
+      context->FireChannelRead(object);
     }
     MPP_API void ChannelReadComplete(ChannelHandlerContext* context) override
     {
