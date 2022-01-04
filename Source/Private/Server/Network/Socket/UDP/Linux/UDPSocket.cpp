@@ -40,12 +40,12 @@ int UDPSocket::Receive(void* data, size_t size, SocketAddress& from)
         return -1;
     }
 
-    from.SetAddress(addr, sizeof(sockaddr_in));
+    from.SetAddress(&addr, sizeof(sockaddr_in));
 
     return received;
 }
 
-bool Listen(const String& ip, int port)
+bool UDPSocket::Listen(const String& ip, int port)
 {
     m_socket = INVALID_SOCKET;
 
