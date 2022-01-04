@@ -6,11 +6,6 @@ project(
 	LANGUAGES C CXX
 )
 
-# Linux Compiler Flags
-if(NOT WIN32)
-    set(CMAKE_SYSTEM_NAME Linux)
-    set(CMAKE_SYSTEM_PROCESSOR arm)
-endif(NOT WIN32)
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(CMAKE_CXX_EXTENSIONS OFF)
@@ -33,6 +28,9 @@ if(WIN32)
     target_compile_definitions(MinePlusPlus PRIVATE MPP_PLATFORM_WINDOWS)
 else()
     target_compile_definitions(MinePlusPlus PRIVATE MPP_PLATFORM_LINUX)
+    set(THREADS_PREFER_PTHREAD_FLAG ON)
+    find_package(Threads REQUIRED)
+    target_link_libraries(MinePlusPlus PRIVATE Threads::Threads dl)
 endif()
 
 target_compile_definitions(MinePlusPlus PRIVATE MPP_EXPORTS MPP_FORCE_DEBUG_LOGS)

@@ -1,12 +1,10 @@
 // Copyright BattleDash. All Rights Reserved.
 
 #if defined(MPP_PLATFORM_WINDOWS)
-#    define _WINSOCKAPI_
-
 #    include <Base/Log.h>
 #    include <Server/Network/Socket/TCP/TCPSocketClient.h>
 
-#    include <Windows.h>
+#    define _WINSOCKAPI_
 #    include <winsock2.h>
 #    include <ws2tcpip.h>
 

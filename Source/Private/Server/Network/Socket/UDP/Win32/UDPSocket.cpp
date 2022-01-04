@@ -39,8 +39,6 @@ int UDPSocket::Receive(void* data, size_t size, SocketAddress& from)
 
     from.SetAddress(&addr, sizeof(sockaddr_in));
 
-    MPP_LOG(LogLevel::Debug, "Received " << received);
-
     return received;
 }
 

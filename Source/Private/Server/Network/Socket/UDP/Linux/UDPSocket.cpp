@@ -15,7 +15,7 @@
 
 namespace mpp
 {
-UDPSocket::UDPSocket() : m_socket(-1)
+UDPSocket::UDPSocket() : m_socket(INVALID_SOCKET)
 {
 }
 
