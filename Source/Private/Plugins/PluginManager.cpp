@@ -5,8 +5,10 @@
 
 #include <filesystem>
 
-#if MPP_PLATFORM_WINDOWS
+#if defined(MPP_PLATFORM_WINDOWS)
 #    include <Windows.h>
+#elif defined(MPP_PLATFORM_LINUX)
+#    include <dlfcn.h>
 #endif
 
 namespace mpp
