@@ -31,7 +31,6 @@ bool TCPSocketManager::Listen(const String& ip, int port)
 
 std::vector<TCPSocketClient*>& TCPSocketManager::Clients()
 {
-    std::lock_guard<std::mutex> lock(m_mutex);
     return m_clients;
 }
 

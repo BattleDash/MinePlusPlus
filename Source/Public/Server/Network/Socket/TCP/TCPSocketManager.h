@@ -7,7 +7,6 @@
 
 #include <vector>
 #include <thread>
-#include <mutex>
 #include <functional>
 
 namespace mpp
@@ -28,11 +27,9 @@ class TCPSocketManager
     MPP_API void AcceptClients();
     MPP_API void Run();
 
-    std::mutex m_mutex;
     TCPSocketServer* m_socket;
-    std::vector<TCPSocketClient*> m_clients;
     bool m_listening;
-    std::thread m_acceptThread;
+    std::vector<TCPSocketClient*> m_clients;
     std::thread m_thread;
     std::function<void(TCPSocketClient*)> m_childHandler;
 };
