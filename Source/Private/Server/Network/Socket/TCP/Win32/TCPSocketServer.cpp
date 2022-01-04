@@ -8,7 +8,7 @@
 #    include <winsock2.h>
 #    include <ws2tcpip.h>
 
-#pragma comment(lib, "Ws2_32.lib")
+#    pragma comment(lib, "Ws2_32.lib")
 
 namespace mpp
 {
@@ -39,6 +39,14 @@ bool TCPSocketServer::Listen(const String& ip, int port)
     if ((m_socket = socket(AF_INET, SOCK_STREAM, 0)) == INVALID_SOCKET)
     {
         MPP_LOG(LogLevel::Error, "Failed to create socket. " << WSAGetLastError());
+        return false;
+    }
+
+    // Turn off blocking
+    u_long mode = 1;
+    if (ioctlsocket(m_socket, FIONBIO, &mode) == INVALID_SOCKET)
+    {
+        MPP_LOG(LogLevel::Error, "Failed to set socket to non-blocking. " << WSAGetLastError());
         return false;
     }
 

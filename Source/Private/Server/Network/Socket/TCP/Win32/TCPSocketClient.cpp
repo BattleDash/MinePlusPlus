@@ -14,11 +14,18 @@ namespace mpp
 {
 TCPSocketClient::TCPSocketClient(int socket) : m_socket(socket), m_pipeline(new SocketPipeline()), m_connected(true)
 {
+    // Turn off blocking
+    u_long mode = 1;
+    if (ioctlsocket(m_socket, FIONBIO, &mode) == INVALID_SOCKET)
+    {
+        MPP_LOG(LogLevel::Error, "Failed to set socket to non-blocking. " << WSAGetLastError());
+    }
 }
 
 TCPSocketClient::~TCPSocketClient()
 {
     Close();
+    delete m_pipeline;
 }
 
 int TCPSocketClient::Send(const void* data, size_t size)
@@ -37,9 +44,17 @@ int TCPSocketClient::Receive(void* data, size_t size)
 {
     int received = recv(m_socket, (char*)data, size, 0);
     if (received == SOCKET_ERROR)
-    {
-        MPP_LOG(LogLevel::Error, "Failed to receive data from client.");
-        return -1;
+    {   
+        int code = WSAGetLastError();
+        if (code == WSAEWOULDBLOCK)
+        {
+            return 0;
+        }
+        else
+        {
+            MPP_LOG(LogLevel::Error, "Failed to receive data from client. " << code);
+            return -1;
+        }
     }
 
     return received;

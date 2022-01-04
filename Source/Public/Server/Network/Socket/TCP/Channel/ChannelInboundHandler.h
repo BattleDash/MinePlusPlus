@@ -13,6 +13,7 @@ class ChannelInboundHandler
     MPP_API virtual void ChannelUnregistered() = 0;
     MPP_API virtual void ChannelActive() = 0;
     MPP_API virtual void ChannelInactive() = 0;
+    MPP_API virtual void ChannelIdle() = 0;
     MPP_API virtual void ChannelRead(void* object) = 0;
     MPP_API virtual void ChannelReadComplete() = 0;
     MPP_API virtual void UserEventTriggered(void* object) = 0;

@@ -17,6 +17,7 @@ class SocketPipeline
     MPP_API ~SocketPipeline();
 
     MPP_API SocketPipeline* AddLast(String name, ChannelInboundHandler* handler);
+    MPP_API ChannelInboundHandler* Get(String name);
     MPP_API std::vector<std::pair<String, ChannelInboundHandler*>>& Handlers();
     MPP_API void Remove(String name);
 
