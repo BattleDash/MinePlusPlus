@@ -17,7 +17,7 @@ UDPSocket::UDPSocket() : m_socket(-1)
 {
 }
 
-int UDPSocket::Send(SocketAddress& address, const void* data, size_t size)
+int UDPSocket::Send(SocketAddress address, const void* data, size_t size)
 {
     int sent = sendto(m_socket, (const char*)data, size, 0, (sockaddr*)address.GetAddress(), sizeof(sockaddr_in));
     if (sent == SO_ERROR)
@@ -29,7 +29,7 @@ int UDPSocket::Send(SocketAddress& address, const void* data, size_t size)
     return sent;
 }
 
-int UDPSocket::Receive(void* data, size_t size, sockaddr& from)
+int UDPSocket::Receive(void* data, size_t size, SocketAddress& from)
 {
     socklen_t fromLength = sizeof(sockaddr_in);
     sockaddr_in addr;
