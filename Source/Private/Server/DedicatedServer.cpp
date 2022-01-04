@@ -28,12 +28,13 @@ void DedicatedServer::InitializeServer()
     MPP_LOG(LogLevel::Info,
             "This server is running MinePlusPlus version " << MPP_VERSION << " (MC: " << MPP_MINECRAFT_VERSION << ")");
 
-    m_pluginLoader->LoadPlugins();
+    m_pluginManager->LoadPlugins();
     EnablePlugins();
 
     MPP_LOG(LogLevel::Info, "Loaded and enabled plugins");
 
-
+    m_serverConnection = new ServerConnection(this);
+    m_serverConnection->StartTCPServer(m_properties->serverIp, m_properties->serverPort);
 
     while (true)
     {

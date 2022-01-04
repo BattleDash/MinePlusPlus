@@ -3,14 +3,9 @@
 #include <ExamplePlugin.h>
 
 #include <Base/Log.h>
-#include <Core/MinePlusPlus.h>
 
 namespace ExamplePlugin
 {
-ExamplePlugin::ExamplePlugin()
-{
-}
-
 mpp::String ExamplePlugin::Name()
 {
     return "ExamplePlugin";
@@ -18,8 +13,7 @@ mpp::String ExamplePlugin::Name()
 
 void ExamplePlugin::OnEnable()
 {
-    MPP_LOG(mpp::LogLevel::Info, "Example plugin is pogging");
-    //mpp::g_minePlusPlus->StartServer();
+    MPP_LOG(mpp::LogLevel::Info, "Example plugin.");
 }
 
 void ExamplePlugin::OnDisable()

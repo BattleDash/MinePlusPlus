@@ -9,8 +9,6 @@ namespace ExamplePlugin
 class ExamplePlugin : public mpp::Plugin
 {
   public:
-    ExamplePlugin();
-
     mpp::String Name() override;
     void OnEnable() override;
     void OnDisable() override;

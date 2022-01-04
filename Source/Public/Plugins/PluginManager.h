@@ -11,11 +11,11 @@
 
 namespace mpp
 {
-class PluginLoader
+class PluginManager
 {
   public:
-    PluginLoader(const ServerProperties* properties);
-    ~PluginLoader();
+    MPP_API PluginManager(const ServerProperties* properties);
+    MPP_API ~PluginManager();
 
     MPP_API void LoadPlugins();
     MPP_API void UnloadPlugins();

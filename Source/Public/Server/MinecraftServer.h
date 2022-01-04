@@ -5,10 +5,13 @@
 #include <Base/Platform.h>
 #include <Base/String.h>
 #include <Core/ServerProperties.h>
-#include <Plugins/PluginLoader.h>
+#include <Plugins/PluginManager.h>
+#include <Server/Network/ServerConnection.h>
 
 namespace mpp
 {
+class ServerConnection;
+
 class MinecraftServer
 {
   public:
@@ -19,6 +22,7 @@ class MinecraftServer
     MPP_API void EnablePlugins();
 
     const ServerProperties* m_properties;
-    PluginLoader* m_pluginLoader;
+    PluginManager* m_pluginManager;
+    ServerConnection* m_serverConnection;
 };
 } // namespace mpp

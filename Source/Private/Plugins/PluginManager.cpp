@@ -1,7 +1,7 @@
 // Copyright BattleDash. All Rights Reserved.
 
 #include <Base/Log.h>
-#include <Plugins/PluginLoader.h>
+#include <Plugins/PluginManager.h>
 
 #include <filesystem>
 
@@ -11,15 +11,20 @@
 
 namespace mpp
 {
-PluginLoader::PluginLoader(const ServerProperties* properties) : m_pluginsDirectory(properties->pluginsDirectory)
+PluginManager::PluginManager(const ServerProperties* properties) : m_pluginsDirectory(properties->pluginsDirectory)
 {
 }
 
-PluginLoader::~PluginLoader()
+PluginManager::~PluginManager()
 {
+    for (WrappedPlugin* plugin : m_plugins)
+    {
+        plugin->m_plugin->OnDisable();
+        delete plugin;
+    }
 }
 
-WrappedPlugin* PluginLoader::LoadPlugin(const std::string& pluginPath)
+WrappedPlugin* PluginManager::LoadPlugin(const std::string& pluginPath)
 {
     // Relative to the base dir
     std::filesystem::path pluginFilePath = std::filesystem::absolute(pluginPath);
@@ -92,12 +97,12 @@ WrappedPlugin* PluginLoader::LoadPlugin(const std::string& pluginPath)
     }
 }
 
-void PluginLoader::LoadPlugins()
+void PluginManager::LoadPlugins()
 {
     for (const auto& pluginPath : std::filesystem::directory_iterator(m_pluginsDirectory))
     {
-        MPP_LOG(LogLevel::Info, "Loading plugin '" << pluginPath.path().string() << "'");
         WrappedPlugin* plugin = LoadPlugin(pluginPath.path().string());
+        MPP_LOG(LogLevel::Info, "Loaded " << plugin->m_plugin->Name());
         m_plugins.push_back(plugin);
     }
 }
