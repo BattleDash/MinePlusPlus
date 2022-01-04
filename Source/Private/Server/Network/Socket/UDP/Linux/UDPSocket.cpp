@@ -1,7 +1,5 @@
 // Copyright BattleDash. All Rights Reserved.
 
-#pragma once
-
 #if defined(MPP_PLATFORM_LINUX)
 #    include <Base/Log.h>
 #    include <Server/Network/Socket/UDP/UDPSocket.h>

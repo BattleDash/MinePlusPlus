@@ -1,7 +1,4 @@
 // Copyright BattleDash. All Rights Reserved.
-// Copyright BattleDash. All Rights Reserved.
-
-#pragma once
 
 #if defined(MPP_PLATFORM_LINUX)
 #    include <Server/Network/Socket/TCP/TCPSocketClient.h>
