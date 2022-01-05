@@ -163,9 +163,9 @@ uint8_t AbstractByteBuf::GetByte(int index)
 uint8_t AbstractByteBuf::ReadByte()
 {
     int i = m_readerIndex;
-    uint8_t b = GetByte(i);
+    uint8_t v = GetByte(i);
     m_readerIndex = i + 1;
-    return b;
+    return v;
 }
 
 bool AbstractByteBuf::ReadBoolean()
@@ -176,5 +176,40 @@ bool AbstractByteBuf::ReadBoolean()
 uint8_t AbstractByteBuf::ReadUnsignedByte()
 {
     return ReadByte() & 0xFF;
+}
+
+short AbstractByteBuf::ReadShort()
+{
+    short v = _GetShort(m_readerIndex);
+    m_readerIndex += 2;
+    return v;
+}
+
+int AbstractByteBuf::ReadUnsignedShort()
+{
+    return ReadShort() & 0xFFFF;
+}
+
+int AbstractByteBuf::ReadInt()
+{
+    int v = _GetInt(m_readerIndex);
+    m_readerIndex += 4;
+    return v;
+}
+
+wchar_t AbstractByteBuf::ReadWChar()
+{
+    return static_cast<wchar_t>(ReadShort());
+}
+
+wchar_t* AbstractByteBuf::ReadWString(int length)
+{
+    wchar_t* str = new wchar_t[length + 1];
+    for (int i = 0; i < length; i++)
+    {
+        str[i] = ReadWChar();
+    }
+    str[length] = 0;
+    return str;
 }
 } // namespace mpp

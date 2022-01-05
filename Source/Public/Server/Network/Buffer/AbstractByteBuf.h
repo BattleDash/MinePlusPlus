@@ -41,6 +41,11 @@ class AbstractByteBuf : public ByteBuf
     MPP_API uint8_t ReadByte() override;
     MPP_API bool ReadBoolean() override;
     MPP_API uint8_t ReadUnsignedByte() override;
+    MPP_API short ReadShort() override;
+    MPP_API int ReadUnsignedShort() override;
+    MPP_API int ReadInt() override;
+    MPP_API wchar_t ReadWChar() override;
+    MPP_API wchar_t* ReadWString(int length) override;
 
   protected:
     int m_readerIndex;

@@ -6,4 +6,5 @@
 namespace mpp
 {
 using String = std::string;
+using WideString = std::wstring;
 }

@@ -23,13 +23,16 @@ TCPSocketServer::~TCPSocketServer()
 
 TCPSocketClient* TCPSocketServer::Accept()
 {
-    int clientSocket = accept(m_socket, NULL, NULL);
+    // Accept and get client addr
+    sockaddr clientAddr;
+    int addrSize = sizeof(clientAddr);
+    int clientSocket = accept(m_socket, &clientAddr, &addrSize);
     if (clientSocket == INVALID_SOCKET)
     {
         return nullptr;
     }
 
-    return new TCPSocketClient(clientSocket);
+    return new TCPSocketClient(clientSocket, SocketAddress(&clientAddr, addrSize));
 }
 
 bool TCPSocketServer::Listen(const String& ip, int port)

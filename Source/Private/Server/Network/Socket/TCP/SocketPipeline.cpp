@@ -10,6 +10,10 @@ HeadContext::HeadContext(SocketPipeline* pipeline)
 {
 }
 
+HeadContext::~HeadContext()
+{
+}
+
 TailContext::TailContext(SocketPipeline* pipeline)
     : ChannelHandlerContext(pipeline, "mpp_internal_pipeline_tail", this), ChannelInboundHandlerAdapter()
 {
@@ -19,7 +23,8 @@ void TailContext::ChannelRead(ChannelHandlerContext* context, void* object)
 {
 }
 
-SocketPipeline::SocketPipeline() : m_head(new HeadContext(this)), m_tail(new TailContext(this))
+SocketPipeline::SocketPipeline(TCPSocketClient* client)
+    : m_client(client), m_head(new HeadContext(this)), m_tail(new TailContext(this))
 {
     m_head->m_next = m_tail;
     m_tail->m_prev = m_head;
@@ -27,8 +32,7 @@ SocketPipeline::SocketPipeline() : m_head(new HeadContext(this)), m_tail(new Tai
 
 SocketPipeline::~SocketPipeline()
 {
-    // delete m_head;
-    // delete m_tail;
+    delete m_head;
 }
 
 SocketPipeline* SocketPipeline::AddLast(const String& name, ChannelHandler* handler)

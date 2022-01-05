@@ -72,6 +72,7 @@ void TCPSocketManager::Run()
                         MPP_LOG(LogLevel::Debug, "Pipeline is " << client->Pipeline()->ToString());
                         ctx->FireChannelRead(buf);
                         MPP_LOG(LogLevel::Debug, "Pipeline complete");
+                        delete buf;
                     }
                     catch (const std::exception& e)
                     {
@@ -88,7 +89,7 @@ void TCPSocketManager::Run()
                 MPP_LOG(LogLevel::Debug, "Client disconnected");
                 it = clients.erase(it);
                 client->Close();
-                delete client;
+                //delete client;
             }
             else
             {

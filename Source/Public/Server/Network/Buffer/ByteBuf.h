@@ -34,12 +34,21 @@ class ByteBuf
     MPP_API virtual ByteBuf& MarkWriterIndex() = 0;
     MPP_API virtual ByteBuf& ResetWriterIndex() = 0;
 
+    MPP_API virtual void* GetData() = 0;
     MPP_API virtual uint8_t GetByte(int index) = 0;
     MPP_API virtual uint8_t _GetByte(int index) = 0;
+    MPP_API virtual short _GetShort(int index) = 0;
+    MPP_API virtual int _GetInt(int index) = 0;
 
     MPP_API virtual uint8_t ReadByte() = 0;
     MPP_API virtual bool ReadBoolean() = 0;
     MPP_API virtual uint8_t ReadUnsignedByte() = 0;
+    MPP_API virtual short ReadShort() = 0;
+    MPP_API virtual int ReadUnsignedShort() = 0;
+    MPP_API virtual int ReadInt() = 0;
+    MPP_API virtual wchar_t ReadWChar() = 0;
+    MPP_API virtual wchar_t* ReadWString(int length) = 0;
+
     MPP_API virtual ByteBuf* ReadBytes(int length) = 0;
     MPP_API virtual void WriteBytes(void* src, int srcIndex, int length) = 0;
 };

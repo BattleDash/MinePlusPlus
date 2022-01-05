@@ -15,6 +15,7 @@ UnpooledDirectByteBuf::UnpooledDirectByteBuf(int initialCapacity, int maxCapacit
 
 UnpooledDirectByteBuf::~UnpooledDirectByteBuf()
 {
+    delete[] m_buffer;
 }
 
 int UnpooledDirectByteBuf::Capacity()
@@ -22,15 +23,30 @@ int UnpooledDirectByteBuf::Capacity()
     return m_capacity;
 }
 
+void* UnpooledDirectByteBuf::GetData()
+{
+    return m_buffer;
+}
+
 uint8_t UnpooledDirectByteBuf::_GetByte(int index)
 {
     return m_buffer[index];
 }
 
+short UnpooledDirectByteBuf::_GetShort(int index)
+{
+    return (m_buffer[index] << 8) | m_buffer[index + 1];
+}
+
+int UnpooledDirectByteBuf::_GetInt(int index)
+{
+    return (m_buffer[index] << 24) | (m_buffer[index + 1] << 16) | (m_buffer[index + 2] << 8) | m_buffer[index + 3];
+}
+
 ByteBuf* UnpooledDirectByteBuf::ReadBytes(int length)
 {
     CheckReadableBytes(length);
-    UnpooledDirectByteBuf* newBuf = new UnpooledDirectByteBuf(length, m_capacity);
+    UnpooledDirectByteBuf* newBuf = new UnpooledDirectByteBuf(length, length);
     memcpy(newBuf->m_buffer, m_buffer + m_readerIndex, length);
     m_readerIndex += length;
     return newBuf;

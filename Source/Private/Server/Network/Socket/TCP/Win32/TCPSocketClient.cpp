@@ -12,7 +12,8 @@
 
 namespace mpp
 {
-TCPSocketClient::TCPSocketClient(int socket) : m_socket(socket), m_pipeline(new SocketPipeline()), m_connected(true)
+TCPSocketClient::TCPSocketClient(int socket, SocketAddress address)
+    : m_socket(socket), m_address(address), m_pipeline(new SocketPipeline(this)), m_connected(true)
 {
     // Turn off blocking
     u_long mode = 1;

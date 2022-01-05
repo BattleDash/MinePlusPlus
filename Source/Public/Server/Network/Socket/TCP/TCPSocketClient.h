@@ -5,16 +5,19 @@
 #include <Base/Platform.h>
 #include <Base/String.h>
 
+#include <Server/Network/Socket/SocketAddress.h>
 #include <Server/Network/Socket/TCP/SocketPipeline.h>
 
 #include <map>
 
 namespace mpp
 {
+class SocketPipeline;
+
 class TCPSocketClient
 {
   public:
-    MPP_API TCPSocketClient(int socket);
+    MPP_API TCPSocketClient(int socket, const SocketAddress address);
     MPP_API ~TCPSocketClient();
 
     MPP_API int Send(const void* data, size_t size);
@@ -45,6 +48,7 @@ class TCPSocketClient
     }
 
     bool m_connected;
+    SocketAddress m_address;
 
   private:
     SocketPipeline* m_pipeline;

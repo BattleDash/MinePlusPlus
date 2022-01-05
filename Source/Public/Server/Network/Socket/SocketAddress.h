@@ -5,8 +5,12 @@
 #include <Base/Platform.h>
 #include <Base/String.h>
 
-#if defined(MPP_PLATFORM_LINUX)
+#if defined(MPP_PLATFORM_WINDOWS)
+#    include <WinSock2.h>
+#    include <ws2tcpip.h>
+#elif defined(MPP_PLATFORM_LINUX)
 #    include <string.h>
+#    include <sys/socket.h>
 #endif
 
 namespace mpp
@@ -39,6 +43,45 @@ class SocketAddress
     int GetLength() const
     {
         return m_length;
+    }
+
+    String GetIPString()
+    {
+        struct sockaddr* sa = reinterpret_cast<sockaddr*>(m_address);
+        if (sa->sa_family == AF_INET)
+        {
+            struct sockaddr_in* sin = reinterpret_cast<sockaddr_in*>(sa);
+            return String(inet_ntoa(sin->sin_addr));
+        }
+        else if (sa->sa_family == AF_INET6)
+        {
+            struct sockaddr_in6* sin6 = reinterpret_cast<sockaddr_in6*>(sa);
+            return "";
+            //return String(inet_ntop(AF_INET6, &sin6->sin6_addr, m_ipString, sizeof(m_ipString)));
+        }
+        else
+        {
+            return "Unknown Protocol";
+        }
+    }
+
+    int GetPort()
+    {
+        struct sockaddr* sa = reinterpret_cast<sockaddr*>(m_address);
+        if (sa->sa_family == AF_INET)
+        {
+            struct sockaddr_in* sin = reinterpret_cast<sockaddr_in*>(sa);
+            return ntohs(sin->sin_port);
+        }
+        else if (sa->sa_family == AF_INET6)
+        {
+            struct sockaddr_in6* sin6 = reinterpret_cast<sockaddr_in6*>(sa);
+            return ntohs(sin6->sin6_port);
+        }
+        else
+        {
+            return -1;
+        }
     }
 
   private:
