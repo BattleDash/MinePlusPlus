@@ -47,6 +47,13 @@ class AbstractByteBuf : public ByteBuf
     MPP_API wchar_t ReadWChar() override;
     MPP_API wchar_t* ReadWString(int length) override;
 
+    MPP_API void WriteByte(uint8_t value) override;
+    MPP_API void WriteBoolean(bool value) override;
+    MPP_API void WriteUnsignedByte(uint8_t value) override;
+    MPP_API void WriteShort(short value) override;
+    MPP_API void WriteUnsignedShort(int value) override;
+    MPP_API void WriteInt(int value) override;
+
   protected:
     int m_readerIndex;
     int m_writerIndex;

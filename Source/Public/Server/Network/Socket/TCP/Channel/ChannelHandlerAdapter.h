@@ -3,11 +3,11 @@
 #pragma once
 
 #include <Base/Platform.h>
-#include <Server/Network/Socket/TCP/Channel/ChannelInboundHandler.h>
+#include <Server/Network/Socket/TCP/Channel/ChannelHandler.h>
 
 namespace mpp
 {
-class ChannelInboundHandlerAdapter : public ChannelInboundHandler
+class ChannelHandlerAdapter : public ChannelHandler
 {
   public:
     MPP_API bool IsInbound() override
@@ -16,7 +16,7 @@ class ChannelInboundHandlerAdapter : public ChannelInboundHandler
     }
     MPP_API bool IsOutbound() override
     {
-        return false;
+        return true;
     }
     MPP_API void ChannelRegistered(ChannelHandlerContext* context) override
     {
@@ -51,6 +51,7 @@ class ChannelInboundHandlerAdapter : public ChannelInboundHandler
     }
     MPP_API void Write(ChannelHandlerContext* context, void* object) override
     {
+        context->Write(object);
     }
 };
 } // namespace mpp

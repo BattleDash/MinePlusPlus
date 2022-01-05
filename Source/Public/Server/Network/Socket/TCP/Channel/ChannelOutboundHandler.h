@@ -8,7 +8,7 @@
 
 namespace mpp
 {
-class ChannelInboundHandler : public ChannelHandler
+class ChannelOutboundHandler : public ChannelHandler
 {
   public:
 };

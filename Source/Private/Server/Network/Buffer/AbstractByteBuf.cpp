@@ -212,4 +212,37 @@ wchar_t* AbstractByteBuf::ReadWString(int length)
     str[length] = 0;
     return str;
 }
+
+void AbstractByteBuf::WriteByte(uint8_t value)
+{
+    _SetByte(m_writerIndex, value);
+    m_writerIndex += 1;
+}
+
+void AbstractByteBuf::WriteBoolean(bool value)
+{
+    WriteByte(value ? 1 : 0);
+}
+
+void AbstractByteBuf::WriteUnsignedByte(uint8_t value)
+{
+    WriteByte(value & 0xFF);
+}
+
+void AbstractByteBuf::WriteShort(short value)
+{
+    _SetShort(m_writerIndex, value);
+    m_writerIndex += 2;
+}
+
+void AbstractByteBuf::WriteUnsignedShort(int value)
+{
+    WriteShort(value & 0xFFFF);
+}
+
+void AbstractByteBuf::WriteInt(int value)
+{
+    _SetInt(m_writerIndex, value);
+    m_writerIndex += 4;
+}
 } // namespace mpp

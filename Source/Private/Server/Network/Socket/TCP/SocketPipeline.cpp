@@ -2,11 +2,12 @@
 
 #include <Base/Log.h>
 #include <Server/Network/Socket/TCP/SocketPipeline.h>
+#include <Server/Network/Buffer/ByteBuf.h>
 
 namespace mpp
 {
 HeadContext::HeadContext(SocketPipeline* pipeline)
-    : ChannelHandlerContext(pipeline, "mpp_internal_pipeline_head", this), ChannelInboundHandlerAdapter()
+    : ChannelHandlerContext(pipeline, "mpp_internal_pipeline_head", this), ChannelHandlerAdapter()
 {
 }
 
@@ -14,8 +15,15 @@ HeadContext::~HeadContext()
 {
 }
 
+void HeadContext::Write(ChannelHandlerContext* context, void* object)
+{
+    ByteBuf* buffer = static_cast<ByteBuf*>(object);
+    m_pipeline->m_client->Send(buffer->GetData(), buffer->WriterIndex());
+    delete buffer;
+}
+
 TailContext::TailContext(SocketPipeline* pipeline)
-    : ChannelHandlerContext(pipeline, "mpp_internal_pipeline_tail", this), ChannelInboundHandlerAdapter()
+    : ChannelHandlerContext(pipeline, "mpp_internal_pipeline_tail", this), ChannelHandlerAdapter()
 {
 }
 

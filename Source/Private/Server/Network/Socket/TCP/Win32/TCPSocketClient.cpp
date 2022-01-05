@@ -38,6 +38,8 @@ int TCPSocketClient::Send(const void* data, size_t size)
         return -1;
     }
 
+    MPP_LOG(LogLevel::Debug, "Sent " << sent << " bytes to client.");
+
     return sent;
 }
 

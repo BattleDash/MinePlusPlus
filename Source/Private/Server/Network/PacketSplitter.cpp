@@ -25,7 +25,7 @@ void PacketSplitter::ChannelRead(ChannelHandlerContext* context, void* object)
         packetList[i] = byteBuf->ReadByte();
         if (packetList[i] >= 0)
         {
-            PacketDataSerializer packetDataSerializer(Unpooled::WrapBuffer(packetList, sizeof(packetList)));
+            PacketDataSerializer packetDataSerializer(Unpooled::WrapArray(packetList, sizeof(packetList)));
             int size = packetDataSerializer.ReadVarInt();
             if (byteBuf->ReadableBytes() >= size)
             {

@@ -9,11 +9,18 @@ namespace mpp
 class Unpooled
 {
 public:
-    static ByteBuf* WrapBuffer(void* data, size_t size)
+    static ByteBuf* WrapArray(void* data, size_t size)
     {
-        UnpooledDirectByteBuf* buffer = new UnpooledDirectByteBuf(0, size);
+        UnpooledDirectByteBuf* buffer = new UnpooledDirectByteBuf(size, size);
+        buffer->WriterIndex(0);
         buffer->WriteBytes(data, 0, size);
         return buffer;
+    }
+    static ByteBuf* Buffer()
+    {
+        ByteBuf* byteBuf = new UnpooledDirectByteBuf(512, 2147483647);
+        byteBuf->WriterIndex(0);
+        return byteBuf;
     }
 };
 } // namespace mpp

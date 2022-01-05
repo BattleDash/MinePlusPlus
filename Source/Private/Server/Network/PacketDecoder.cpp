@@ -12,5 +12,6 @@ PacketDecoder::PacketDecoder(EProtocolDirection direction) : m_direction(directi
 void PacketDecoder::ChannelRead(ChannelHandlerContext* context, void* object)
 {
     ByteBuf* buffer = static_cast<ByteBuf*>(object);
+    context->Close();
 }
 } // namespace mpp

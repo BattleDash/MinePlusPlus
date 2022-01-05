@@ -1,7 +1,7 @@
 // Copyright BattleDash. All Rights Reserved.
 
 #include <Base/Log.h>
-#include <Server/Network/Buffer/UnpooledDirectByteBuf.h>
+#include <Server/Network/Buffer/Unpooled.h>
 #include <Server/Network/Socket/TCP/Channel/ChannelInboundHandler.h>
 #include <Server/Network/Socket/TCP/TCPSocketManager.h>
 
@@ -65,8 +65,7 @@ void TCPSocketManager::Run()
                 {
                     try
                     {
-                        UnpooledDirectByteBuf* buf = new UnpooledDirectByteBuf(0, size);
-                        buf->WriteBytes(buffer, 0, size);
+                        ByteBuf* buf = Unpooled::WrapArray(buffer, size);
                         ChannelHandlerContext* ctx = client->Pipeline()->m_head;
                         MPP_LOG(LogLevel::Debug, "Received " << size << " bytes");
                         MPP_LOG(LogLevel::Debug, "Pipeline is " << client->Pipeline()->ToString());
@@ -79,7 +78,7 @@ void TCPSocketManager::Run()
                         MPP_LOG(LogLevel::Error, "Exception: " << e.what());
                     }
                 }
-                else if (size <= 0)
+                else if (size < 0)
                 {
                     client->m_connected = false;
                 }
@@ -89,7 +88,7 @@ void TCPSocketManager::Run()
                 MPP_LOG(LogLevel::Debug, "Client disconnected");
                 it = clients.erase(it);
                 client->Close();
-                //delete client;
+                // delete client;
             }
             else
             {

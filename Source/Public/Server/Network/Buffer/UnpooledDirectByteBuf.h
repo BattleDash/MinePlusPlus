@@ -21,6 +21,10 @@ class UnpooledDirectByteBuf : public AbstractByteBuf
     MPP_API ByteBuf* ReadBytes(int length) override;
     MPP_API void WriteBytes(void* src, int srcIndex, int length) override;
 
+    MPP_API void _SetByte(int index, uint8_t value) override;
+    MPP_API void _SetShort(int index, short value) override;
+    MPP_API void _SetInt(int index, int value) override;
+
   private:
     uint8_t* m_buffer;
     int m_capacity;

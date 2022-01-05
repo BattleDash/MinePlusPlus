@@ -6,20 +6,22 @@
 #include <Base/String.h>
 #include <Server/Network/Socket/TCP/TCPSocketClient.h>
 #include <Server/Network/Socket/TCP/Channel/ChannelHandlerContext.h>
-#include <Server/Network/Socket/TCP/Channel/ChannelInboundHandlerAdapter.h>
+#include <Server/Network/Socket/TCP/Channel/ChannelHandlerAdapter.h>
 
 #include <vector>
 
 namespace mpp
 {
-class HeadContext : public ChannelHandlerContext, public ChannelInboundHandlerAdapter
+class HeadContext : public ChannelHandlerContext, public ChannelHandlerAdapter
 {
 public:
     MPP_API HeadContext(SocketPipeline* pipeline);
     MPP_API ~HeadContext();
+
+    MPP_API void Write(ChannelHandlerContext* context, void* object) override;
 };
 
-class TailContext : public ChannelHandlerContext, public ChannelInboundHandlerAdapter
+class TailContext : public ChannelHandlerContext, public ChannelHandlerAdapter
 {
 public:
     MPP_API TailContext(SocketPipeline* pipeline);
@@ -36,6 +38,9 @@ class SocketPipeline
     MPP_API ~SocketPipeline();
 
     MPP_API SocketPipeline* AddLast(const String& name, ChannelHandler* handler);
+    MPP_API ChannelHandlerContext* FirstContext();
+    MPP_API ChannelHandlerContext* LastContext();
+
     MPP_API ChannelHandlerContext* Get(const String& name);
     MPP_API void Remove(const String& name);
     MPP_API const String ToString();
