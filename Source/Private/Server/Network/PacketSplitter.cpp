@@ -30,7 +30,7 @@ void PacketSplitter::ChannelRead(ChannelHandlerContext* context, void* object)
             if (byteBuf->ReadableBytes() >= size)
             {
                 ByteBuf* packet = byteBuf->ReadBytes(size);
-                MPP_LOG(LogLevel::Debug, "Received valid packet " << packet->ReadableBytes());
+                MPP_LOG(LogLevel::Debug, "Received valid packet with size " << packet->ReadableBytes());
                 context->FireChannelRead(static_cast<void*>(packet));
                 return;
             }

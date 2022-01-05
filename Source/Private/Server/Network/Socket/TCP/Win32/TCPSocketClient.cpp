@@ -51,7 +51,7 @@ int TCPSocketClient::Receive(void* data, size_t size)
         int code = WSAGetLastError();
         if (code == WSAEWOULDBLOCK)
         {
-            return 0;
+            return -2;
         }
         else
         {

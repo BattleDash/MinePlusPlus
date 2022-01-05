@@ -66,10 +66,9 @@ void TCPSocketManager::Run()
                     try
                     {
                         ByteBuf* buf = Unpooled::WrapArray(buffer, size);
-                        ChannelHandlerContext* ctx = client->Pipeline()->m_head;
                         MPP_LOG(LogLevel::Debug, "Received " << size << " bytes");
                         MPP_LOG(LogLevel::Debug, "Pipeline is " << client->Pipeline()->ToString());
-                        ctx->FireChannelRead(buf);
+                        client->Pipeline()->m_head->FireChannelRead(buf);
                         MPP_LOG(LogLevel::Debug, "Pipeline complete");
                         delete buf;
                     }
@@ -78,7 +77,7 @@ void TCPSocketManager::Run()
                         MPP_LOG(LogLevel::Error, "Exception: " << e.what());
                     }
                 }
-                else if (size < 0)
+                else if (size == -1)
                 {
                     client->m_connected = false;
                 }
