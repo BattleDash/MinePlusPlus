@@ -64,13 +64,14 @@ WrappedPlugin* PluginManager::LoadPlugin(const std::string& pluginPath)
 
             if (pluginLibrary != nullptr)
             {
-                pluginFunction = reinterpret_cast<Plugin* (*)()>(GetProcAddress(pluginLibrary, "?CreatePlugin@@YAPEAVPlugin@mpp@@XZ"));
+                pluginFunction = reinterpret_cast<Plugin* (*)()>(
+                    GetProcAddress(pluginLibrary, "?CreatePlugin@@YAPEAVPlugin@mpp@@XZ"));
 
                 if (pluginFunction == nullptr)
                 {
                     FreeLibrary(pluginLibrary);
-                    MPP_LOG(LogLevel::Error, "Could not load '" << pluginFilePath.string()
-                                                                << "'. Could not find CreatePlugin function");
+                    MPP_LOG(LogLevel::Error,
+                            "Could not load '" << pluginFilePath.string() << "'. Could not find CreatePlugin function");
                     return nullptr;
                 }
             }
@@ -78,8 +79,7 @@ WrappedPlugin* PluginManager::LoadPlugin(const std::string& pluginPath)
         }
         else
         {
-            MPP_LOG(LogLevel::Error,
-                    "Could not load '" << pluginFilePath.string() << "'. Unknown file extension");
+            MPP_LOG(LogLevel::Error, "Could not load '" << pluginFilePath.string() << "'. Unknown file extension");
             return nullptr;
         }
 
@@ -101,11 +101,30 @@ WrappedPlugin* PluginManager::LoadPlugin(const std::string& pluginPath)
 
 void PluginManager::LoadPlugins()
 {
-    for (const auto& pluginPath : std::filesystem::directory_iterator(m_pluginsDirectory))
+    if (!std::filesystem::exists(m_pluginsDirectory))
     {
-        WrappedPlugin* plugin = LoadPlugin(pluginPath.path().string());
-        MPP_LOG(LogLevel::Info, "Loaded " << plugin->m_plugin->Name());
-        m_plugins.push_back(plugin);
+        std::filesystem::create_directory(m_pluginsDirectory);
+    }
+    
+    for (const auto& entry : std::filesystem::directory_iterator(m_pluginsDirectory))
+    {
+        if (std::filesystem::is_directory(entry.path()))
+        {
+            continue;
+        }
+
+        // Check if the file is a plugin
+        if (entry.path().extension() == ".so" || entry.path().extension() == ".dll")
+        {
+            // Load the plugin
+            WrappedPlugin* plugin = LoadPlugin(entry.path().string());
+
+            if (plugin != nullptr)
+            {
+                MPP_LOG(LogLevel::Info, "Loaded " << plugin->m_plugin->Name());
+                m_plugins.push_back(plugin);
+            }
+        }
     }
 }
 } // namespace mpp
