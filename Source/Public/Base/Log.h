@@ -5,11 +5,11 @@
 #include <Base/Platform.h>
 #include <Base/String.h>
 
+#include <cassert>
 #include <iostream>
 #include <sstream>
 #include <stdio.h>
 #include <string>
-#include <cassert>
 
 namespace mpp
 {

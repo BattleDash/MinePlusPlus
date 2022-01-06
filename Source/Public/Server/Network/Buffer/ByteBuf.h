@@ -47,7 +47,9 @@ class ByteBuf
     MPP_API virtual int ReadUnsignedShort() = 0;
     MPP_API virtual int ReadInt() = 0;
     MPP_API virtual wchar_t ReadWChar() = 0;
+    MPP_API virtual char ReadChar() = 0;
     MPP_API virtual wchar_t* ReadWString(int length) = 0;
+    MPP_API virtual char* ReadString(int length) = 0;
 
     MPP_API virtual void _SetByte(int index, uint8_t value) = 0;
     MPP_API virtual void _SetShort(int index, short value) = 0;

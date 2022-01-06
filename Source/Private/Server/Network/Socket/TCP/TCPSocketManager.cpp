@@ -74,7 +74,7 @@ void TCPSocketManager::Run()
                     }
                     catch (const std::exception& e)
                     {
-                        MPP_LOG(LogLevel::Error, "Exception: " << e.what());
+                        MPP_LOG(LogLevel::Error, "Exception reading packet: " << e.what());
                     }
                 }
                 else if (size == -1)

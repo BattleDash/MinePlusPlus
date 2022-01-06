@@ -40,7 +40,7 @@ class TCPSocketClient
     }
     template <typename T> MPP_API void Attr(const String& key, T* value)
     {
-        m_attributes[key] = value;
+        m_attributes.insert(std::make_pair(key, value));
     }
     template <typename T> MPP_API bool HasAttr(const String& key)
     {

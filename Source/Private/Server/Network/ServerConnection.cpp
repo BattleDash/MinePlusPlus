@@ -1,10 +1,13 @@
 // Copyright BattleDash. All Rights Reserved.
 
 #include <Base/Log.h>
-#include <Server/Network/ServerConnection.h>
+#include <Server/Network/HandshakeListener.h>
 #include <Server/Network/LegacyPingHandler.h>
-#include <Server/Network/PacketSplitter.h>
+#include <Server/Network/NetworkManager.h>
 #include <Server/Network/PacketDecoder.h>
+#include <Server/Network/PacketSplitter.h>
+#include <Server/Network/Protocol/ConnectionProtocol.h>
+#include <Server/Network/ServerConnection.h>
 
 namespace mpp
 {
@@ -27,7 +30,13 @@ void ServerConnection::StartTCPServer(String host, int port)
             ->AddLast("legacy_query", new LegacyPingHandler(this))
             ->AddLast("packet_splitter", new PacketSplitter())
             ->AddLast("decoder", new PacketDecoder(EProtocolDirection::SERVERBOUND));
+
+        NetworkManager* networkManager = new NetworkManager(EProtocolDirection::SERVERBOUND, client);
+        client->Pipeline()->AddLast("packet_handler", networkManager);
+        networkManager->SetListener(new HandshakeListener(m_server, networkManager));
     });
     m_socketManager->Listen(host, port);
+
+    ConnectionProtocol::Initialize();
 }
 } // namespace mpp

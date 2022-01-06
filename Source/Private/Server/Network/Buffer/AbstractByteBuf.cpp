@@ -202,12 +202,28 @@ wchar_t AbstractByteBuf::ReadWChar()
     return static_cast<wchar_t>(ReadShort());
 }
 
+char AbstractByteBuf::ReadChar()
+{
+    return static_cast<char>(ReadShort());
+}
+
 wchar_t* AbstractByteBuf::ReadWString(int length)
 {
     wchar_t* str = new wchar_t[length + 1];
     for (int i = 0; i < length; i++)
     {
         str[i] = ReadWChar();
+    }
+    str[length] = 0;
+    return str;
+}
+
+char* AbstractByteBuf::ReadString(int length)
+{
+    char* str = new char[length + 1];
+    for (int i = 0; i < length; i++)
+    {
+        str[i] = ReadChar();
     }
     str[length] = 0;
     return str;
