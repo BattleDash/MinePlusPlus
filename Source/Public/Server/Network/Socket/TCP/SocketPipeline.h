@@ -38,9 +38,7 @@ class SocketPipeline
     MPP_API ~SocketPipeline();
 
     MPP_API SocketPipeline* AddLast(const String& name, ChannelHandler* handler);
-    MPP_API ChannelHandlerContext* FirstContext();
-    MPP_API ChannelHandlerContext* LastContext();
-
+    
     MPP_API ChannelHandlerContext* Get(const String& name);
     MPP_API void Remove(const String& name);
     MPP_API const String ToString();

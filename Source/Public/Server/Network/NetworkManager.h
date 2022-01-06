@@ -21,6 +21,7 @@ class NetworkManager : public ChannelInboundHandlerAdapter
     MPP_API void ChannelRead(ChannelHandlerContext* context, void* object) override;
     MPP_API void SetListener(PacketListener* packetListener);
     MPP_API void SetProtocol(ConnectionProtocol* connectionProtocol);
+    MPP_API void Send(Packet<void>* packet);
 
   private:
     TCPSocketClient* m_client;

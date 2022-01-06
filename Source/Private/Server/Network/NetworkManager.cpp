@@ -31,4 +31,9 @@ void NetworkManager::SetProtocol(ConnectionProtocol* connectionProtocol)
 {
     m_client->Attr("protocol", connectionProtocol);
 }
+
+void NetworkManager::Send(Packet<void>* packet)
+{
+    m_client->Pipeline()->m_tail->Write(packet);
+}
 } // namespace mpp

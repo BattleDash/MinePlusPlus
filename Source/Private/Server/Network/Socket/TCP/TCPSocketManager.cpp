@@ -66,10 +66,8 @@ void TCPSocketManager::Run()
                     try
                     {
                         ByteBuf* buf = Unpooled::WrapArray(buffer, size);
-                        MPP_LOG(LogLevel::Debug, "Received " << size << " bytes");
                         MPP_LOG(LogLevel::Debug, "Pipeline is " << client->Pipeline()->ToString());
                         client->Pipeline()->m_head->FireChannelRead(buf);
-                        MPP_LOG(LogLevel::Debug, "Pipeline complete");
                         delete buf;
                     }
                     catch (const std::exception& e)
@@ -77,7 +75,7 @@ void TCPSocketManager::Run()
                         MPP_LOG(LogLevel::Error, "Exception reading packet: " << e.what());
                     }
                 }
-                else if (size == -1)
+                else if (size == -1 || size == 0)
                 {
                     client->m_connected = false;
                 }

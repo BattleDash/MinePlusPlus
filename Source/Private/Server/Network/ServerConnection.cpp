@@ -5,6 +5,8 @@
 #include <Server/Network/LegacyPingHandler.h>
 #include <Server/Network/NetworkManager.h>
 #include <Server/Network/PacketDecoder.h>
+#include <Server/Network/PacketEncoder.h>
+#include <Server/Network/PacketPrepender.h>
 #include <Server/Network/PacketSplitter.h>
 #include <Server/Network/Protocol/ConnectionProtocol.h>
 #include <Server/Network/ServerConnection.h>
@@ -29,7 +31,9 @@ void ServerConnection::StartTCPServer(String host, int port)
         client->Pipeline()
             ->AddLast("legacy_query", new LegacyPingHandler(this))
             ->AddLast("packet_splitter", new PacketSplitter())
-            ->AddLast("decoder", new PacketDecoder(EProtocolDirection::SERVERBOUND));
+            ->AddLast("decoder", new PacketDecoder(EProtocolDirection::SERVERBOUND))
+            ->AddLast("prepender", new PacketPrepender())
+            ->AddLast("encoder", new PacketEncoder(EProtocolDirection::CLIENTBOUND));
 
         NetworkManager* networkManager = new NetworkManager(EProtocolDirection::SERVERBOUND, client);
         client->Pipeline()->AddLast("packet_handler", networkManager);

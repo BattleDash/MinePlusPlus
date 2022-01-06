@@ -1,5 +1,7 @@
 // Copyright BattleDash. All Rights Reserved.
 
+#include <Base/Log.h>
+#include <Server/Network/Protocol/ConnectionProtocol.h>
 #include <Server/Network/Protocol/Handshake/PacketHandshakingInSetProtocol.h>
 
 namespace mpp

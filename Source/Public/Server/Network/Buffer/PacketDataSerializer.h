@@ -43,6 +43,7 @@ public:
     MPP_API short ReadShort() override;
     MPP_API int ReadUnsignedShort() override;
     MPP_API int ReadInt() override;
+    MPP_API int64_t ReadLong() override;
     MPP_API wchar_t ReadWChar() override;
     MPP_API wchar_t* ReadWString(int length) override;
     MPP_API char ReadChar() override;
@@ -54,6 +55,7 @@ public:
     MPP_API void WriteShort(short value) override;
     MPP_API void WriteUnsignedShort(int value) override;
     MPP_API void WriteInt(int value) override;
+    MPP_API void WriteLong(int64_t value) override;
 
     MPP_API int Capacity() override;
 
@@ -61,16 +63,21 @@ public:
     MPP_API uint8_t _GetByte(int index) override;
     MPP_API short _GetShort(int index) override;
     MPP_API int _GetInt(int index) override;
+    MPP_API int64_t _GetLong(int index) override;
     MPP_API ByteBuf* ReadBytes(int length) override;
     MPP_API void WriteBytes(void* src, int srcIndex, int length) override;
 
     MPP_API void _SetByte(int index, uint8_t value) override;
     MPP_API void _SetShort(int index, short value) override;
     MPP_API void _SetInt(int index, int value) override;
+    MPP_API void _SetLong(int index, int64_t value) override;
 
     MPP_API int ReadVarInt();
+    MPP_API PacketDataSerializer* WriteVarInt(int value);
+    MPP_API static int GetVarIntSize(int value);
     MPP_API String ReadUtf();
     MPP_API String ReadUtf(int maxLength);
+    MPP_API PacketDataSerializer* WriteUtf(const String& string);
 
 private:
     ByteBuf* m_buffer;

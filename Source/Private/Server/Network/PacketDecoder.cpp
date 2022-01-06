@@ -19,14 +19,25 @@ void PacketDecoder::ChannelRead(ChannelHandlerContext* context, void* object)
     {
         PacketDataSerializer packetDataSerializer(byteBuf);
         int packetId = packetDataSerializer.ReadVarInt();
-        MPP_LOG(LogLevel::Debug, "Received packet with id " << packetId);
         ConnectionProtocol* protocol = context->m_pipeline->m_client->Attr<ConnectionProtocol>("protocol");
         if (protocol != nullptr)
         {
             PacketWrapper* packetWrapper = protocol->GetPacketWrapper(m_direction, packetId);
             if (packetWrapper != nullptr)
             {
-                context->FireChannelRead(static_cast<void*>(packetWrapper->ctor(&packetDataSerializer)));
+                MPP_LOG(LogLevel::Debug, "Deserializing packet " << packetWrapper->name);
+                void* packet = packetWrapper->ctor(&packetDataSerializer);
+                context->FireChannelRead(packet);
+                delete packet;
+                if (packetDataSerializer.IsReadable())
+                {
+                    MPP_LOG(LogLevel::Error, "Packet " << packetWrapper->name << " has " << packetDataSerializer.ReadableBytes()
+                                                      << " bytes left in the serializer");
+                }
+            }
+            else
+            {
+                MPP_LOG(LogLevel::Error, "Unknown packet id " << packetId);
             }
         }
         else

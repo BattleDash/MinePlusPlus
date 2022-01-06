@@ -3,9 +3,8 @@
 #pragma once
 
 #include <Base/String.h>
-#include <Server/Network/Protocol/ConnectionProtocol.h>
-#include <Server/Network/Protocol/Handshake/PacketHandshakingInListener.h>
 #include <Server/Network/Protocol/Packet.h>
+#include <Server/Network/Protocol/Handshake/PacketHandshakingInListener.h>
 
 namespace mpp
 {

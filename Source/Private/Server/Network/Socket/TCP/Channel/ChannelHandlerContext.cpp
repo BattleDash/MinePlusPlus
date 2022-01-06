@@ -44,7 +44,6 @@ ChannelHandlerContext& ChannelHandlerContext::FireChannelRead(void* object)
         MPP_LOG(LogLevel::Error, "No next handler");
         throw new std::exception();
     }
-    MPP_LOG(LogLevel::Debug, "Executing " << ctx->m_name << " from " << m_name);
     ctx->m_handler->ChannelRead(ctx, object);
     return *this;
 }
@@ -57,7 +56,6 @@ ChannelHandlerContext& ChannelHandlerContext::Write(void* object)
         MPP_LOG(LogLevel::Error, "No previous handler");
         throw new std::exception();
     }
-    MPP_LOG(LogLevel::Debug, "Executing " << ctx->m_name << " from " << m_name);
     ctx->m_handler->Write(ctx, object);
     return *this;
 }

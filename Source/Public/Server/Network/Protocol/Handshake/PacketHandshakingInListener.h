@@ -4,6 +4,7 @@
 
 #include <Server/Network/PacketListener.h>
 #include <Server/Network/Protocol/Packet.h>
+#include <Server/Network/Protocol/Handshake/PacketHandshakingInSetProtocol.h>
 
 namespace mpp
 {

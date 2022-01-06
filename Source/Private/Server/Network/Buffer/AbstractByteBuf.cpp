@@ -197,6 +197,13 @@ int AbstractByteBuf::ReadInt()
     return v;
 }
 
+int64_t AbstractByteBuf::ReadLong()
+{
+    int64_t v = _GetLong(m_readerIndex);
+    m_readerIndex += 8;
+    return v;
+}
+
 wchar_t AbstractByteBuf::ReadWChar()
 {
     return static_cast<wchar_t>(ReadShort());
@@ -260,5 +267,11 @@ void AbstractByteBuf::WriteInt(int value)
 {
     _SetInt(m_writerIndex, value);
     m_writerIndex += 4;
+}
+
+void AbstractByteBuf::WriteLong(int64_t value)
+{
+    _SetLong(m_writerIndex, value);
+    m_writerIndex += 8;
 }
 } // namespace mpp

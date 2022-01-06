@@ -18,7 +18,7 @@ int PacketDataSerializer::ReadVarInt()
     uint8_t b;
     do
     {
-        b = m_buffer->ReadByte();
+        b = ReadByte();
         value |= (b & 127) << shift++ * 7;
         if (shift > 5)
         {
@@ -26,6 +26,29 @@ int PacketDataSerializer::ReadVarInt()
         }
     } while ((b & 128) == 128);
     return value;
+}
+
+PacketDataSerializer* PacketDataSerializer::WriteVarInt(int value)
+{
+    while ((value & -128) != 0)
+    {
+        WriteByte((value & 127) | 128);
+        value = value >> 7;
+    }
+    WriteByte(value);
+    return this;
+}
+
+int PacketDataSerializer::GetVarIntSize(int value)
+{
+    for (int i = 1; i < 5; ++i)
+    {
+        if ((value & -1 << i * 7) == 0)
+        {
+            return i;
+        }
+    }
+    return 5;
 }
 
 String PacketDataSerializer::ReadUtf()
@@ -46,10 +69,16 @@ String PacketDataSerializer::ReadUtf(int maxLength)
     }
     else
     {
-        //char* test = m_buffer->ReadString(length);
-        MPP_LOG(LogLevel::Debug, "Reading " << length << " " << test);
-        return String(test);
+        uint8_t* arr = reinterpret_cast<uint8_t*>(m_buffer->ReadBytes(length)->GetData());
+        return String(reinterpret_cast<char*>(arr), length);
     }
+}
+
+PacketDataSerializer* PacketDataSerializer::WriteUtf(const String& str)
+{
+    WriteVarInt(str.length());
+    m_buffer->WriteBytes(const_cast<char*>(str.c_str()), 0, str.length());
+    return this;
 }
 
 bool PacketDataSerializer::IsReadOnly()
@@ -200,6 +229,11 @@ int PacketDataSerializer::ReadInt()
     return m_buffer->ReadInt();
 }
 
+int64_t PacketDataSerializer::ReadLong()
+{
+    return m_buffer->ReadLong();
+}
+
 wchar_t PacketDataSerializer::ReadWChar()
 {
     return m_buffer->ReadWChar();
@@ -250,6 +284,11 @@ void PacketDataSerializer::WriteInt(int value)
     m_buffer->WriteInt(value);
 }
 
+void PacketDataSerializer::WriteLong(int64_t value)
+{
+    m_buffer->WriteLong(value);
+}
+
 int PacketDataSerializer::Capacity()
 {
     return m_buffer->Capacity();
@@ -275,6 +314,11 @@ int PacketDataSerializer::_GetInt(int index)
     return m_buffer->_GetInt(index);
 }
 
+int64_t PacketDataSerializer::_GetLong(int index)
+{
+    return m_buffer->_GetLong(index);
+}
+
 ByteBuf* PacketDataSerializer::ReadBytes(int length)
 {
     return m_buffer->ReadBytes(length);
@@ -293,6 +337,11 @@ void PacketDataSerializer::_SetShort(int index, short value)
 void PacketDataSerializer::_SetInt(int index, int value)
 {
     m_buffer->_SetInt(index, value);
+}
+
+void PacketDataSerializer::_SetLong(int index, int64_t value)
+{
+    m_buffer->_SetLong(index, value);
 }
 
 void PacketDataSerializer::WriteBytes(void* src, int srcIndex, int length)

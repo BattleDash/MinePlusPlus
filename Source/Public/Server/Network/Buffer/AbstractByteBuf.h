@@ -44,6 +44,7 @@ class AbstractByteBuf : public ByteBuf
     MPP_API short ReadShort() override;
     MPP_API int ReadUnsignedShort() override;
     MPP_API int ReadInt() override;
+    MPP_API int64_t ReadLong() override;
     MPP_API wchar_t ReadWChar() override;
     MPP_API wchar_t* ReadWString(int length) override;
     MPP_API char ReadChar() override;
@@ -55,6 +56,7 @@ class AbstractByteBuf : public ByteBuf
     MPP_API void WriteShort(short value) override;
     MPP_API void WriteUnsignedShort(int value) override;
     MPP_API void WriteInt(int value) override;
+    MPP_API void WriteLong(int64_t value) override;
 
   protected:
     int m_readerIndex;

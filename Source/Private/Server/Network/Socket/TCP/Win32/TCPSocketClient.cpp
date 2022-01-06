@@ -16,10 +16,16 @@ TCPSocketClient::TCPSocketClient(int socket, SocketAddress address)
     : m_socket(socket), m_address(address), m_pipeline(new SocketPipeline(this)), m_connected(true)
 {
     // Turn off blocking
-    u_long mode = 1;
+    /*u_long mode = 1;
     if (ioctlsocket(m_socket, FIONBIO, &mode) == INVALID_SOCKET)
     {
         MPP_LOG(LogLevel::Error, "Failed to set socket to non-blocking. " << WSAGetLastError());
+    }*/
+
+    int flag = 1;
+    if (setsockopt(m_socket, IPPROTO_TCP, TCP_NODELAY, (const char*)&flag, sizeof(flag)) == INVALID_SOCKET)
+    {
+        MPP_LOG(LogLevel::Error, "Failed to set socket options. " << WSAGetLastError());
     }
 }
 
@@ -37,8 +43,6 @@ int TCPSocketClient::Send(const void* data, size_t size)
         MPP_LOG(LogLevel::Error, "Failed to send data to client.");
         return -1;
     }
-
-    MPP_LOG(LogLevel::Debug, "Sent " << sent << " bytes to client.");
 
     return sent;
 }

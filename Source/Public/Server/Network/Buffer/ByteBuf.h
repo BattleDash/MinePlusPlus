@@ -39,6 +39,7 @@ class ByteBuf
     MPP_API virtual uint8_t _GetByte(int index) = 0;
     MPP_API virtual short _GetShort(int index) = 0;
     MPP_API virtual int _GetInt(int index) = 0;
+    MPP_API virtual int64_t _GetLong(int index) = 0;
 
     MPP_API virtual uint8_t ReadByte() = 0;
     MPP_API virtual bool ReadBoolean() = 0;
@@ -46,6 +47,7 @@ class ByteBuf
     MPP_API virtual short ReadShort() = 0;
     MPP_API virtual int ReadUnsignedShort() = 0;
     MPP_API virtual int ReadInt() = 0;
+    MPP_API virtual int64_t ReadLong() = 0;
     MPP_API virtual wchar_t ReadWChar() = 0;
     MPP_API virtual char ReadChar() = 0;
     MPP_API virtual wchar_t* ReadWString(int length) = 0;
@@ -54,6 +56,7 @@ class ByteBuf
     MPP_API virtual void _SetByte(int index, uint8_t value) = 0;
     MPP_API virtual void _SetShort(int index, short value) = 0;
     MPP_API virtual void _SetInt(int index, int value) = 0;
+    MPP_API virtual void _SetLong(int index, int64_t value) = 0;
 
     MPP_API virtual void WriteByte(uint8_t value) = 0;
     MPP_API virtual void WriteBoolean(bool value) = 0;
@@ -61,6 +64,7 @@ class ByteBuf
     MPP_API virtual void WriteShort(short value) = 0;
     MPP_API virtual void WriteUnsignedShort(int value) = 0;
     MPP_API virtual void WriteInt(int value) = 0;
+    MPP_API virtual void WriteLong(int64_t value) = 0;
 
     MPP_API virtual ByteBuf* ReadBytes(int length) = 0;
     MPP_API virtual void WriteBytes(void* src, int srcIndex, int length) = 0;

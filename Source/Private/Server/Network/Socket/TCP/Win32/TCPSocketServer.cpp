@@ -62,6 +62,13 @@ bool TCPSocketServer::Listen(const String& ip, int port)
         return false;
     }
 
+    int flag = 1;
+    if (setsockopt(m_socket, IPPROTO_TCP, TCP_NODELAY, (const char*)&flag, sizeof(flag)) == INVALID_SOCKET)
+    {
+        MPP_LOG(LogLevel::Error, "Failed to set socket options. " << WSAGetLastError());
+        return false;
+    }
+
     sockaddr_in address;
     address.sin_family = AF_INET;
     address.sin_port = htons(port);

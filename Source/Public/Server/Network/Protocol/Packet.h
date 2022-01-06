@@ -15,6 +15,13 @@ template <typename T> class Packet
     MPP_API virtual void Write(PacketDataSerializer* serializer) = 0;
     MPP_API virtual void Handle(T* listener) = 0;
 
+    // This absolutely sucks. I love it.
+    MPP_API String Name()
+    {
+        String name = String(typeid(*this).name());
+        return name.substr(name.find_last_of(':')+1);
+    }
+
     MPP_API void IsSkippable()
     {
         return false;

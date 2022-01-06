@@ -13,33 +13,33 @@ void PacketSplitter::ChannelRead(ChannelHandlerContext* context, void* object)
     byteBuf->MarkReaderIndex();
     uint8_t packetList[3];
 
-    for (int i = 0; i < sizeof(packetList); i++)
+    while (true)
     {
-        if (!byteBuf->IsReadable())
+        for (int i = 0; i < 3; i++)
         {
-            MPP_LOG(LogLevel::Debug, "Unreadable");
-            byteBuf->ResetReaderIndex();
-            return;
-        }
-
-        packetList[i] = byteBuf->ReadByte();
-        if (packetList[i] >= 0)
-        {
-            PacketDataSerializer packetDataSerializer(Unpooled::WrapArray(packetList, sizeof(packetList)));
-            int size = packetDataSerializer.ReadVarInt();
-            if (byteBuf->ReadableBytes() >= size)
+            if (!byteBuf->IsReadable())
             {
-                ByteBuf* packet = byteBuf->ReadBytes(size);
-                MPP_LOG(LogLevel::Debug, "Received valid packet with size " << packet->ReadableBytes());
-                context->FireChannelRead(static_cast<void*>(packet));
+                byteBuf->ResetReaderIndex();
                 return;
             }
-            else
+
+            packetList[i] = byteBuf->ReadByte();
+            if (packetList[i] >= 0)
             {
-                MPP_LOG(LogLevel::Debug, "Not enough bytes");
-                byteBuf->ResetReaderIndex();
+                PacketDataSerializer packetDataSerializer(Unpooled::WrapArray(packetList, sizeof(packetList)));
+                int size = packetDataSerializer.ReadVarInt();
+                if (byteBuf->ReadableBytes() >= size)
+                {
+                    ByteBuf* packet = byteBuf->ReadBytes(size);
+                    context->FireChannelRead(static_cast<void*>(packet));
+                }
+                else
+                {
+                    MPP_LOG(LogLevel::Debug, "Not enough bytes");
+                    byteBuf->ResetReaderIndex();
+                }
+                break;
             }
-            return;
         }
     }
 }

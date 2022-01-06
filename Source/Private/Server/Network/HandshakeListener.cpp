@@ -2,7 +2,8 @@
 
 #include <Base/Log.h>
 #include <Server/Network/HandshakeListener.h>
-#include <Server/Network/Protocol/Handshake/PacketHandshakingInSetProtocol.h>
+#include <Server/Network/NetworkManager.h>
+#include <Server/Network/StatusListener.h>
 
 namespace mpp
 {
@@ -23,9 +24,16 @@ NetworkManager* HandshakeListener::GetConnection()
 
 void HandshakeListener::HandleIntention(PacketHandshakingInSetProtocol* packet)
 {
-    MPP_LOG(LogLevel::Debug, "[PacketHandshakingInSetProtocol] Client Protocol Version: " << packet->m_protocolVersion);
-    MPP_LOG(LogLevel::Debug, "[PacketHandshakingInSetProtocol] Client Host: " << packet->m_host);
-    MPP_LOG(LogLevel::Debug, "[PacketHandshakingInSetProtocol] Client Port: " << packet->m_port);
-    MPP_LOG(LogLevel::Debug, "[PacketHandshakingInSetProtocol] Client Intention: " << packet->m_intention->m_id);
+    MPP_LOG(LogLevel::Debug, "Client Protocol Version: " << packet->m_protocolVersion);
+    MPP_LOG(LogLevel::Debug, "Client Host: " << packet->m_host);
+    MPP_LOG(LogLevel::Debug, "Client Port: " << packet->m_port);
+    MPP_LOG(LogLevel::Debug, "Client Intention: " << packet->m_intention->m_name);
+    switch (packet->m_intention->m_id)
+    {
+    case 1:
+        m_connection->SetProtocol(packet->m_intention);
+        m_connection->SetListener(new StatusListener(m_server, m_connection));
+        break;
+    }
 }
 } // namespace mpp

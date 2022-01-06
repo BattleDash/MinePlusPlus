@@ -43,6 +43,14 @@ int UnpooledDirectByteBuf::_GetInt(int index)
     return (m_buffer[index] << 24) | (m_buffer[index + 1] << 16) | (m_buffer[index + 2] << 8) | m_buffer[index + 3];
 }
 
+int64_t UnpooledDirectByteBuf::_GetLong(int index)
+{
+    return (static_cast<int64_t>(m_buffer[index]) << 56) | (static_cast<int64_t>(m_buffer[index + 1]) << 48) |
+           (static_cast<int64_t>(m_buffer[index + 2]) << 40) | (static_cast<int64_t>(m_buffer[index + 3]) << 32) |
+           (static_cast<int64_t>(m_buffer[index + 4]) << 24) | (static_cast<int64_t>(m_buffer[index + 5]) << 16) |
+           (static_cast<int64_t>(m_buffer[index + 6]) << 8) | m_buffer[index + 7];
+}
+
 ByteBuf* UnpooledDirectByteBuf::ReadBytes(int length)
 {
     CheckReadableBytes(length);
@@ -69,6 +77,18 @@ void UnpooledDirectByteBuf::_SetInt(int index, int value)
     m_buffer[index + 1] = (value >> 16) & 0xFF;
     m_buffer[index + 2] = (value >> 8) & 0xFF;
     m_buffer[index + 3] = value & 0xFF;
+}
+
+void UnpooledDirectByteBuf::_SetLong(int index, int64_t value)
+{
+    m_buffer[index] = (value >> 56) & 0xFF;
+    m_buffer[index + 1] = (value >> 48) & 0xFF;
+    m_buffer[index + 2] = (value >> 40) & 0xFF;
+    m_buffer[index + 3] = (value >> 32) & 0xFF;
+    m_buffer[index + 4] = (value >> 24) & 0xFF;
+    m_buffer[index + 5] = (value >> 16) & 0xFF;
+    m_buffer[index + 6] = (value >> 8) & 0xFF;
+    m_buffer[index + 7] = value & 0xFF;
 }
 
 void UnpooledDirectByteBuf::WriteBytes(void* src, int srcIndex, int length)
