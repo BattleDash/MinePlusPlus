@@ -23,7 +23,6 @@ TCPSocketServer::~TCPSocketServer()
 
 TCPSocketClient* TCPSocketServer::Accept()
 {
-    // Accept and get client addr
     sockaddr clientAddr;
     int addrSize = sizeof(clientAddr);
     int clientSocket = accept(m_socket, &clientAddr, &addrSize);
@@ -63,7 +62,7 @@ bool TCPSocketServer::Listen(const String& ip, int port)
     }
 
     int flag = 1;
-    if (setsockopt(m_socket, IPPROTO_TCP, TCP_NODELAY, (const char*)&flag, sizeof(flag)) == INVALID_SOCKET)
+    if (setsockopt(m_socket, SOL_SOCKET, TCP_NODELAY, (const char*)&flag, sizeof(flag)) == INVALID_SOCKET)
     {
         MPP_LOG(LogLevel::Error, "Failed to set socket options. " << WSAGetLastError());
         return false;

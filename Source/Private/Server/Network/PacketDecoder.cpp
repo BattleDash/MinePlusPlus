@@ -28,7 +28,7 @@ void PacketDecoder::ChannelRead(ChannelHandlerContext* context, void* object)
                 MPP_LOG(LogLevel::Debug, "Deserializing packet " << packetWrapper->name);
                 void* packet = packetWrapper->ctor(&packetDataSerializer);
                 context->FireChannelRead(packet);
-                delete packet;
+                delete reinterpret_cast<Packet<void>*>(packet);
                 if (packetDataSerializer.IsReadable())
                 {
                     MPP_LOG(LogLevel::Error, "Packet " << packetWrapper->name << " has " << packetDataSerializer.ReadableBytes()

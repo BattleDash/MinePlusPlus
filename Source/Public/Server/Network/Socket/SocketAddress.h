@@ -11,6 +11,9 @@
 #elif defined(MPP_PLATFORM_LINUX)
 #    include <string.h>
 #    include <sys/socket.h>
+#    include <netinet/in.h>
+#    include <netinet/ip.h>
+#    include <arpa/inet.h>
 #endif
 
 namespace mpp

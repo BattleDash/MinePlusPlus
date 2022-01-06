@@ -7,6 +7,9 @@
 #include <Server/Network/PacketListener.h>
 #include <Server/Network/Protocol/EProtocolDirection.h>
 
+#include <typeinfo>
+#include <cxxabi.h>
+
 namespace mpp
 {
 template <typename T> class Packet
@@ -18,11 +21,12 @@ template <typename T> class Packet
     // This absolutely sucks. I love it.
     MPP_API String Name()
     {
-        String name = String(typeid(*this).name());
+        int status;
+        String name = String(abi::__cxa_demangle(typeid(*this).name(), nullptr, nullptr, &status));
         return name.substr(name.find_last_of(':')+1);
     }
 
-    MPP_API void IsSkippable()
+    MPP_API bool IsSkippable()
     {
         return false;
     }

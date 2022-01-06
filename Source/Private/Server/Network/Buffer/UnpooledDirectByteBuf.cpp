@@ -5,6 +5,10 @@
 
 #include <stdexcept>
 
+#if defined(MPP_PLATFORM_LINUX)
+#    include <cstring>
+#endif
+
 namespace mpp
 {
 UnpooledDirectByteBuf::UnpooledDirectByteBuf(int initialCapacity, int maxCapacity)

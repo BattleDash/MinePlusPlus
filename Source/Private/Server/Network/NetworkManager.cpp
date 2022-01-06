@@ -1,5 +1,6 @@
 // Copyright BattleDash. All Rights Reserved.
 
+#include <Base/Log.h>
 #include <Server/Network/NetworkManager.h>
 
 namespace mpp
@@ -34,6 +35,17 @@ void NetworkManager::SetProtocol(ConnectionProtocol* connectionProtocol)
 
 void NetworkManager::Send(Packet<void>* packet)
 {
-    m_client->Pipeline()->m_tail->Write(packet);
+    try
+    {
+        m_client->Pipeline()->m_tail->Write(packet);
+    }
+    catch (const std::exception& e)
+    {
+        MPP_LOG(LogLevel::Error, "Failed to send packet: " << e.what());
+    }
+    catch (...)
+    {
+        MPP_LOG(LogLevel::Error, "Failed to send packet " << packet->Name());
+    }
 }
 } // namespace mpp

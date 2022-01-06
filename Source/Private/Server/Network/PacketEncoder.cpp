@@ -21,6 +21,10 @@ void PacketEncoder::Write(ChannelHandlerContext* context, void* object)
         throw new std::runtime_error("ConnectionProtocol unknown for packet '" + packet->Name() + "'");
     }
     int id = protocol->GetPacketId(packet);
+    if (id == -1)
+    {
+        throw new std::runtime_error("Packet '" + packet->Name() + "' invalid");
+    }
     MPP_LOG(LogLevel::Debug,
             "Sending packet with id " << id << " (" << packet->Name() << "), using protocol " << protocol->m_name);
     ByteBuf* buffer = Unpooled::Buffer();

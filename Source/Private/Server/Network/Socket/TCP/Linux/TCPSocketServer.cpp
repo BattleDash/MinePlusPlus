@@ -10,6 +10,8 @@
 #    include <sys/socket.h>
 #    include <sys/types.h>
 #    include <unistd.h>
+#    include <sys/ioctl.h>
+#    include <netinet/tcp.h>
 
 #    define INVALID_SOCKET -1
 
@@ -26,9 +28,8 @@ TCPSocketServer::~TCPSocketServer()
 
 TCPSocketClient* TCPSocketServer::Accept()
 {
-    // Accept and get client addr
     sockaddr clientAddr;
-    int addrSize = sizeof(clientAddr);
+    socklen_t addrSize = sizeof(clientAddr);
     int clientSocket = accept(m_socket, &clientAddr, &addrSize);
     if (clientSocket == INVALID_SOCKET)
     {
@@ -50,7 +51,7 @@ bool TCPSocketServer::Listen(const String& ip, int port)
 
     // Turn off blocking
     u_long mode = 1;
-    if (ioctlsocket(m_socket, FIONBIO, &mode) == INVALID_SOCKET)
+    if (ioctl(m_socket, FIONBIO, &mode) == INVALID_SOCKET)
     {
         MPP_LOG(LogLevel::Error, "Failed to set socket to non-blocking. " << errno);
         return false;
@@ -64,9 +65,15 @@ bool TCPSocketServer::Listen(const String& ip, int port)
         MPP_LOG(LogLevel::Error, "Failed to set socket options. " << errno);
         return false;
     }
-
+    
     int flag = 1;
-    if (setsockopt(m_socket, IPPROTO_TCP, TCP_NODELAY, (const char*)&flag, sizeof(flag)) == INVALID_SOCKET)
+    if (setsockopt(m_socket, SOL_SOCKET, SO_REUSEADDR, (const char*)&flag, sizeof(flag)) == INVALID_SOCKET)
+    {
+        MPP_LOG(LogLevel::Error, "Failed to set socket options. " << errno);
+        return false;
+    }
+
+    if (setsockopt(m_socket, SOL_SOCKET, TCP_NODELAY, (const char*)&flag, sizeof(flag)) == INVALID_SOCKET)
     {
         MPP_LOG(LogLevel::Error, "Failed to set socket options. " << errno);
         return false;

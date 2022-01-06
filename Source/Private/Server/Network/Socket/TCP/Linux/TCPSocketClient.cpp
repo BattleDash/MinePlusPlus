@@ -57,7 +57,7 @@ int TCPSocketClient::Receive(void* data, size_t size)
 
 void TCPSocketClient::Close()
 {
-    closesocket(m_socket);
+    close(m_socket);
 }
 } // namespace mpp
 #endif
